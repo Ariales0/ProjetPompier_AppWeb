@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 /// <summary>
 /// Namespace contenant les classes d'utilisation autres.
 /// </summary>
-namespace GestionCegepWEBMVC.Utils
+namespace ProjetPompier_API.Utils
 {
     /// <summary>
     /// Classe représentant l'outil de communication vers le service Web distant.
