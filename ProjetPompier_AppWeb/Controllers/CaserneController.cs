@@ -8,6 +8,13 @@ namespace ProjetPompier_AppWeb.Controllers
 {
     public class CaserneController : Controller
     {
+
+        /// <summary>
+		/// Méthode de service appelé lors de l'action Index.
+		/// Rôles de l'action : 
+		///   Afficher et exécuter le fichier index.cshtml du répertoire Views/Caserne
+		/// </summary>
+		/// <returns>IActionResult</returns>
         [Route("")]
         [Route("Caserne")]
         [HttpGet]
@@ -17,11 +24,18 @@ namespace ProjetPompier_AppWeb.Controllers
             JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
             List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponse.ToString());
             ViewBag.NbCaserne = listeCaserneDTO.Count;
-            //ViewBag.Liste prend la valeur de la liste des cégeps
+            //ViewBag.Liste prend la valeur de la liste des casernes
             ViewBag.ListeCaserne = listeCaserneDTO;
             return View();
         }
 
+        /// <summary>
+		/// Méthode de service appelé lors de l'action AjouterCaserne.
+		/// Rôles de l'action : 
+		///   -Ajouter une caserne.
+		/// </summary>
+		/// <param name="caserneDTO">Le DTO d'une caserne.</param>
+		/// <returns>IActionResult</returns>
         [Route("/Caserne/AjouterCaserne")]
         [HttpPost]
         public async Task<IActionResult> AjouterCaserne(CaserneDTO caserneDTO)
@@ -41,6 +55,12 @@ namespace ProjetPompier_AppWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+		/// Action FormulaireModifierCaserne.
+		/// Permet d'afficher le formulaire pour la modification d'une caserne.
+		/// </summary> 
+		/// <param name="nomCaserne">Nom de la caserne à modifier.</param>
+		/// <returns>IActionResult</returns>
         [Route("/Caserne/FormulaireModifierCaserne")]
         [HttpGet]
         public async Task<IActionResult> FormulaireModifierCaserne([FromQuery]string nomCaserne)
@@ -58,6 +78,12 @@ namespace ProjetPompier_AppWeb.Controllers
             }
         }
 
+        /// <summary>
+		/// Action ModifierCaserne.
+		/// Permet de modifier une caserne.
+		/// </summary>
+		/// <param name="caserneDTO">Le DTO de la caserne à modifier.</param>
+		/// <returns>ActionResult</returns>
         [Route("/Caserne/ModifierCaserne")]
         [HttpPost]
         public async Task<IActionResult> ModifierCaserne(CaserneDTO caserneDTO)
@@ -76,6 +102,11 @@ namespace ProjetPompier_AppWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>aserne.
+		/// Permet de supprimer une caserne.
+		/// </summary>
+		/// <param name="nomCaserne">Le nom de la caserne.</param>
+		/// <returns>ActionResult</returns>
         [Route("/Caserne/SupprimerCaserne")]
         [HttpPost]
         public async Task<IActionResult> SupprimerCaserne(string nomCaserne)
@@ -92,6 +123,11 @@ namespace ProjetPompier_AppWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+		/// Action SupprimerCaserne.
+		/// Permet de supprimer une caserne.
+		/// </summary>
+		/// <returns>ActionResult</returns>
         [Route("/Caserne/ViderListeCaserne")]
         [HttpPost]
         public async Task<IActionResult> ViderListeCaserne()
