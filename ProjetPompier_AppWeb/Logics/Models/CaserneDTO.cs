@@ -2,7 +2,7 @@
 /// <summary>
 /// Namespace pour les classe de type DTOs.
 /// </summary>
-namespace ProjetPompier_API.Logics.Models
+namespace ProjetPompier_AppWeb.Logics.Models
 {
     /// <summary>
     /// Classe représentant le DTO d'une caserne.

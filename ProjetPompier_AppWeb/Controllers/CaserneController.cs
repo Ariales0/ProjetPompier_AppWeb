@@ -1,7 +1,7 @@
-﻿using ProjetPompier_API.Utils;
+﻿using ProjetPompier_AppWeb.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ProjetPompier_API.Logics.Models;
+using ProjetPompier_AppWeb.Logics.Models;
 using System.Json;
 
 namespace ProjetPompier_AppWeb.Controllers
