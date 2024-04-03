@@ -2,8 +2,9 @@ namespace ProjetPompier_AppWeb
 {
     public class Program
     {
-        public static string HOST = "localhost";
-        public static int PORT = 5048;
+        //public static string HOST = "10.172.80.223";
+		public static string HOST = "localhost";
+		public static int PORT = 5048;
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
