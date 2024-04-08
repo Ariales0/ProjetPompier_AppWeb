@@ -33,6 +33,7 @@ else
                             <div class="boutonsAction d-flex justify-content-center">
                                 <input class="btn-primary rounded" value="Modifier" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/FormulaireModifierCaserne'; this.form.method='get'; submit();" type="button" />
                                 <input class="btn-danger rounded m-1" value="Supprimer" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/SupprimerCaserne'; this.form.method='post'; submit();" type="button" />
+                            <input class="bg-info rounded m-1" type="button" value="Interventions" onclick="document.getElementById('nomCaserne').value  = '@caserne.Nom'; document.getElementById('matriculeCapitaine').value  = '0';  this.form.action='/Intervention?nomCaserne=@caserne.Nom'; this.form.method='get'; submit();" />
 
                             </div>
                         </div>
@@ -44,7 +45,7 @@ else
             </div>
             
 
-        
+        <input id="matriculeCapitaine" nom="matriculeCapitaine" type="hidden" />"
         <input id="nomCaserne" name="nomCaserne" type="hidden" />
     </form>
     <br />

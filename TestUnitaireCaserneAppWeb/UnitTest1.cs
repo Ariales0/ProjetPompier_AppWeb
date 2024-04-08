@@ -35,5 +35,12 @@ namespace TestUnitaireCaserneAppWeb
             controleurCaserne.SupprimerCaserne(caserneDTO.Nom);
 
         }
+
+        [Fact]
+        public void TestFoncitonnelIntervention()
+        {
+            InterventionController interventionController = new InterventionController();
+            
+        }
     }
 }
