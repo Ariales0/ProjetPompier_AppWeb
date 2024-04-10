@@ -85,8 +85,8 @@ else
 					<input class="m-1 btn-success rounded" type="submit" value="Ajouter">
 				</div>
 				<input type="hidden" value="@ViewBag.NomCaserne" name="nomCaserne">
-				<input type="hidden" value="@DateTime.Now" name="dateTemps">
-				<input type="hidden" value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine">
+				<input type="hidden" value="@DateTime.Now" name="dateTemps" asp-for="DateTemps">
+				<input type="hidden" value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine" asp-for="MatriculeCapitaine">
 			</form>
 		</div>
     </div>

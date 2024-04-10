@@ -49,12 +49,12 @@ namespace ProjetPompier_AppWeb.Controllers
 		/// <returns>IActionResult</returns>
         [Route("/Intervention/OuvrirFicheIntervention")]
         [HttpPost]
-        public async Task<IActionResult> OuvrirFicheIntervention(string nomCaserne, string dateTemps, string typeIntervention, string adresse, string resume, int matriculeCapitaine)
+        public async Task<IActionResult> OuvrirFicheIntervention(string nomCaserne, FicheInterventionDTO fiche)
         {
             try
             {
-                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/OuvrirFicheIntervention?nomCaserne=" + nomCaserne + "&dateTemps=" + dateTemps + "&typeIntervention=" + typeIntervention
-                    + "&adresse=" + adresse + "&resume=" + resume + "&matriculeCapitaine=" + matriculeCapitaine, null);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/OuvrirFicheIntervention?nomCaserne=" + nomCaserne + "&dateTemps=" + fiche.DateTemps + "&typeIntervention=" + fiche.TypeIntervention
+                    + "&adresse=" + fiche.Adresse + "&resume=" + fiche.Resume + "&matriculeCapitaine=" + fiche.MatriculeCapitaine, null);
             }
             catch (Exception e)
             {
@@ -64,7 +64,7 @@ namespace ProjetPompier_AppWeb.Controllers
             }
 
             //Lancement de l'action Index...
-            return RedirectToAction("Index", "Intervention", new {nomCaserne =nomCaserne, matriculeCapitaine = matriculeCapitaine});
+            return RedirectToAction("Index", "Intervention", new {nomCaserne =nomCaserne, matriculeCapitaine = fiche.MatriculeCapitaine});
         }
 
         

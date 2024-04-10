@@ -39,8 +39,24 @@ namespace TestUnitaireCaserneAppWeb
         [Fact]
         public void TestFoncitonnelIntervention()
         {
-            InterventionController interventionController = new InterventionController();
+           
+            DateTime date = DateTime.Now;
+            FicheInterventionDTO interventionDTO;
+            interventionDTO = new FicheInterventionDTO(date.ToString(), "Adresse Test", "Type Test", "Resume Test", 3);
             
-        }
-    }
+
+            InterventionController controleurIntervention = new InterventionController();
+			
+			controleurIntervention.OuvrirFicheIntervention("Caserne Test", interventionDTO);
+
+			ViewResult resultatIntervention = (ViewResult)controleurIntervention.Index("Caserne Test", 3).Result;
+
+			List<FicheInterventionDTO> listeInterventionDansBDD = new List<FicheInterventionDTO>((List<FicheInterventionDTO>)resultatIntervention.ViewData["ListeIntervention"]);
+
+            Assert.Equal(listeInterventionDansBDD[(listeInterventionDansBDD.Count) - 1].DateTemps, interventionDTO.DateTemps);
+
+
+
+		}
+	}
 }
