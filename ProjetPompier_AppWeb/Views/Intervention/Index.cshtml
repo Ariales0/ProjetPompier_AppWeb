@@ -18,20 +18,36 @@ else
 			<form asp-controller="Intervention" asp-action="Index" method="get">
 
 				<select name="matriculeCapitaine" onchange="submit()">
-					@foreach (PompierDTO pompier in ViewBag.ListePompier)
+					@if(ViewBag.listePompier.Count > 0)
 					{
-						if(pompier.Matricule.Equals(ViewBag.MatriculeCapitaine))
+						@foreach (PompierDTO pompier in ViewBag.ListePompier)
 						{
-							<option value="@pompier.Matricule" selected>@pompier.Prenom @pompier.Nom</option>
-						}
-						else
-						{	
-							<option value="@pompier.Matricule">@pompier.Prenom @pompier.Nom</option>
+							if (pompier.Matricule.Equals(ViewBag.MatriculeCapitaine))
+							{
+								<option value="@pompier.Matricule" selected>@pompier.Prenom @pompier.Nom</option>
+							}
+							else
+							{
+								<option value="@pompier.Matricule">@pompier.Prenom @pompier.Nom</option>
+							}
 						}
 					}
+					else
+						{
+							<option value="">Aucun pompier</option>
+						}
+					}
+					
 				</select>
 				<input type="hidden" id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne">
 			</form>
+			@if(ViewBag.listePompier.Count > 0)
+			{
+				<div class="bg-secondary text-white rounded border-1 m-2 p-2 w-50">
+					<p>Il y a @ViewBag.ListeIntervention.Count Fiches pour le capitaine "@ViewBag.NomPrenomCapitaine"</p>
+				</div>
+
+			}
 			<div class="card-deck d-flex flex-row">
 			@foreach (FicheInterventionDTO fiche in ViewBag.ListeIntervention)
 			{
@@ -52,42 +68,51 @@ else
 			</div>
 		</div>
 		<hr>
+
 		<div class="ajoutFicheIntervention">
 			<h2>Ajout d'une fiche d'intervention</h2>
-			<form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
-				<table>
-					<tr>
-						<td>
-							<label asp-for="TypeIntervention">Type d'intervention : </label>
-						</td>
-						<td>
-							<input asp-for="TypeIntervention">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label asp-for="Adresse">Adresse : </label>
-						</td>
-						<td>
-							<input asp-for="Adresse">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label asp-for="Resume">Résumé</label>
-						</td>
-						<td>
-							<input asp-for="Resume">
-						</td>
-					</tr>
-				</table>
-				<div class="d-flex justify-content-center">
-					<input class="m-1 btn-success rounded" type="submit" value="Ajouter">
-				</div>
-				<input type="hidden" value="@ViewBag.NomCaserne" name="nomCaserne">
-				<input type="hidden" value="@DateTime.Now" name="dateTemps" asp-for="DateTemps">
-				<input type="hidden" value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine" asp-for="MatriculeCapitaine">
-			</form>
+			@if (ViewBag.listePompier.Count > 0)
+			{
+				<form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
+					<table>
+						<tr>
+							<td>
+								<label asp-for="TypeIntervention">Type d'intervention : </label>
+							</td>
+							<td>
+								<input asp-for="TypeIntervention">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label asp-for="Adresse">Adresse : </label>
+							</td>
+							<td>
+								<input asp-for="Adresse">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label asp-for="Resume">Résumé</label>
+							</td>
+							<td>
+								<input asp-for="Resume">
+							</td>
+						</tr>
+					</table>
+					<div class="d-flex justify-content-center">
+						<input class="m-1 btn-success rounded" type="submit" value="Ajouter">
+					</div>
+					<input type="hidden" value="@ViewBag.NomCaserne" name="nomCaserne">
+					<input type="hidden" value="@DateTime.Now" name="dateTemps" asp-for="DateTemps">
+					<input type="hidden" value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine" asp-for="MatriculeCapitaine">
+				</form>
+			}
+			else
+			{
+				<h5>Aucun pompier disponible pour l'ajout d'une fiche d'intervention</h5>
+			}
+			
 		</div>
     </div>
 }
