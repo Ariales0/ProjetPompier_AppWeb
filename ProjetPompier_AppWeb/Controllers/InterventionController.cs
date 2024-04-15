@@ -30,7 +30,7 @@ namespace ProjetPompier_AppWeb.Controllers
             {
 				matriculeCapitaine = listePompier[0].Matricule;
 			}
-			ViewBag.MatriculeCapitaine = matriculeCapitaine;
+            ViewBag.MatriculeCapitaine = matriculeCapitaine;
 
             foreach (PompierDTO pompier in listePompier)
             {
@@ -40,7 +40,7 @@ namespace ProjetPompier_AppWeb.Controllers
                 }
             }
             
-            jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + caserneDTO.Nom + "&matriceCapitaine=" + matriculeCapitaine);
+            jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + caserneDTO.Nom + "&matriculeCapitaine=" + matriculeCapitaine);
             ViewBag.ListeIntervention = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponse.ToString());
             
             

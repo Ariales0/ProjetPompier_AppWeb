@@ -70,7 +70,7 @@ else
 		<hr>
 
 		<div class="ajoutFicheIntervention">
-			<h2>Ajout d'une fiche d'intervention</h2>
+			<h2>Ouverture d'une fiche d'intervention</h2>
 			@if (ViewBag.listePompier.Count > 0)
 			{
 				<form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
@@ -101,7 +101,7 @@ else
 						</tr>
 					</table>
 					<div class="d-flex justify-content-center">
-						<input class="m-1 btn-success rounded" type="submit" value="Ajouter">
+						<input class="m-1 btn-success rounded" type="submit" value="Ouvrir">
 					</div>
 					<input type="hidden" value="@ViewBag.NomCaserne" name="nomCaserne">
 					<input type="hidden" value="@DateTime.Now" name="dateTemps" asp-for="DateTemps">
@@ -110,7 +110,7 @@ else
 			}
 			else
 			{
-				<h5>Aucun pompier disponible pour l'ajout d'une fiche d'intervention</h5>
+				<h5>Aucun pompier disponible pour l'ouverture d'une fiche d'intervention</h5>
 			}
 			
 		</div>
