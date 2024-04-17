@@ -61,8 +61,7 @@ namespace ProjetPompier_AppWeb.Controllers
         {
             try
             {
-                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/OuvrirFicheIntervention?nomCaserne=" + nomCaserne + "&dateTemps=" + fiche.DateTemps + "&typeIntervention=" + fiche.TypeIntervention
-                    + "&adresse=" + fiche.Adresse + "&resume=" + fiche.Resume + "&matriculeCapitaine=" + fiche.MatriculeCapitaine, null);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/OuvrirFicheIntervention?nomCaserne=" + nomCaserne, fiche);
             }
             catch (Exception e)
             {
