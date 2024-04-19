@@ -71,6 +71,7 @@ else
                             <hr />
                             <div class="text-center">
                                     <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer la pompier : @pompier.Nom @pompier.Prenom ?')) {document.getElementById('matriculePompier').value ='@pompier.Matricule'; this.form.action='/Pompier/SupprimerPompier'; this.form.method='post'; submit();}" type="button" />
+                                    <input class="btn btn-primary rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('matriculePompier').value ='@pompier.Matricule'; this.form.action='/Pompier/FormulaireModifierPompier'; this.form.method='get'; submit();" />
                             </div>                           
                         </div>
                     </div>

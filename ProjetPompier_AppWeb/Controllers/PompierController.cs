@@ -79,7 +79,57 @@ namespace ProjetPompier_AppWeb.Controllers
             return RedirectToAction("Index", "Pompier", new { nomCaserne = nomCaserne });
         }
 
+        /// <summary>
+        /// Méthode de service appelé lors de l'action ModifierPompier.
+        /// </summary>
+        /// <param name="nomCaserne">Le nom de la caserne</param>
+        /// <param name="matriculePompier">La matricule du pompier</param>
+        /// <returns>Retourne le formulaire modifier pompier</returns>
+        [Route("Pompier/FormulaireModifierPompier")]
+        [HttpGet]
+        public async Task<IActionResult> FormulaireModifierPompier([FromQuery] string nomCaserne, [FromQuery] int matriculePompier)
+        {
+            try
+            {
+                // Appeler le service web pour obtenir un pompier
+                JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirPompier?nomCaserne=" + nomCaserne + "&matriculePompier=" + matriculePompier);
+                PompierDTO pompierDTO = JsonConvert.DeserializeObject<PompierDTO>(jsonResponse.ToString());
+                ViewBag.NomCaserne = nomCaserne;
+                return View(pompierDTO);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+                return RedirectToAction("Index", "Pompier", new { nomCaserne = nomCaserne });
+            }
+        }
 
+        [Route("Pompier/ModifierPompier")]
+        [HttpPost]
+        public async Task<IActionResult> ModifierPompier(string nomCaserne, PompierDTO pompier)
+        {
+            // Appeler le service web pour modifier un pompier
+            try
+            {
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ModifierPompier?nomCaserne=" + nomCaserne, pompier);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+                //Mettre cette ligne en commentaire avant de lancer les tests fonctionnels
+                TempData["MessageErreur"] = e.Message;
+            }
+            // Rediriger vers l'index pompier
+            return RedirectToAction("Index", "Pompier", new { nomCaserne = nomCaserne });
+        }
+
+
+        /// <summary>
+        ///  Méthode de service appelé lors de l'action ModifierPompier.
+        /// </summary>
+        /// <param name="nomCaserne">Nom de la caserne</param>
+        /// <param name="matriculePompier">Matricule du pompier</param>
+        /// <returns>Retourne la page pompier</returns>
         [Route("Pompier/SupprimerPompier")]
         [HttpPost]
         public async Task<IActionResult> SupprimerPompier(string nomCaserne, int matriculePompier)

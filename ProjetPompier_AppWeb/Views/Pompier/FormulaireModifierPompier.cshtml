@@ -1,0 +1,48 @@
+﻿@using ProjetPompier_AppWeb.Logics.Models
+@model PompierDTO;
+@* Si erreur du côté serveur... affichage du message d'erreur... *@
+@if (ViewBag.MessageErreur != null)
+{
+    <br />
+    <div class="alert alert-danger">@ViewBag.MessageErreur</div>
+}
+else
+{
+    <br />
+    <h3>Modifier pompier : </h3>
+    <hr />
+    @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierCaserne du controleur CaserneController *@
+    <form asp-controller="Pompier" asp-action="ModifierPompier" method="post">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Matricule" class="control-label"></label>
+                        <input asp-for="Matricule" class="form-control" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Nom" class="control-label"></label>
+                        <input asp-for="Nom" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Prenom" class="control-label"></label>
+                        <input asp-for="Prenom" class="form-control"  />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Grade" class="control-label"></label>
+                        <input asp-for="Grade" class="form-control" />
+                    </div>
+
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
+                    <input type="submit" class="btn btn-primary" value="Modifier" />
+                    <input type="button" class="btn btn-danger" value="Annuler" onclick="history.back();" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
