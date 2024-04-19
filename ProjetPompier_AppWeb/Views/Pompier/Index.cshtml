@@ -102,12 +102,19 @@ else
         </div>
         <div class="form-group">
             <label asp-for="Grade" class="control-label"></label>
-            <input asp-for="Grade" class="form-control" required />
+                <select id="Grade" name="Grade" class="form-control" required>
+                    <option value="" disabled selected>Choisir un grade</option>
+                    @foreach (GradeDTO grade in ViewBag.ListeGrade)
+                    {
+                        <option value="@grade.Description">@grade.Description</option>
+                    }
+                </select>
         </div>
         <br />
         <div class="text-center">
             <button type="submit" class="btn btn-success">Ajouter</button>
         </div>
+        <input type="hidden" id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne">
     </div>
     </form>
 }
