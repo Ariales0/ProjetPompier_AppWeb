@@ -43,8 +43,8 @@ else
 			</form>
 			@if(ViewBag.listePompier.Count > 0)
 			{
-				<div class="bg-secondary text-white rounded border-1 m-2 p-2 w-50">
-					<p>Il y a @ViewBag.ListeIntervention.Count Fiches pour le capitaine "@ViewBag.NomPrenomCapitaine"</p>
+				<div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+					<p>Il y a <span class="fw-bold">@ViewBag.ListeIntervention.Count</span> Fiches pour le capitaine "<span class="fw-bold">@ViewBag.NomPrenomCapitaine</span>"</p>
 				</div>
 
 			}

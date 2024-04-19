@@ -1,110 +1,76 @@
 ﻿@using ProjetPompier_AppWeb.Logics.Models;
 @model CaserneDTO;
-@*Si erreur du côté serveur... affichage du message d'erreur...*@
+
 @if (ViewBag.MessageErreur != null)
 {
     <br />
-    <h2 class="alert-danger">@ViewBag.MessageErreur</h2>
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.MessageErreur
+    </div>
 }
 else
 {
-    <h3>Liste des caserne(s) (@ViewBag.NbCaserne Caserne(s) ):</h3>
-    @*Formulaire de la modification de la caserne*@
+    <h3>Liste des casernes (@ViewBag.NbCaserne Caserne(s)):</h3>
+    <hr />
     <form asp-controller="" asp-action="" method="post">
-        
-                <input class="btn-warning rounded" value="Vider" onclick="this.form.action='/Caserne/ViderListeCaserne'; this.form.method='post'; submit();" type="button" />
-           
-
-            @*Parcours la liste des casernes*@
-            <div class="d-flex flex-row card-deck">
-                @foreach (CaserneDTO caserne in ViewBag.ListeCaserne)
-                {
-                    <div class="card d-flex rounded m-2" style="width:20rem;">
-                        <div class="card-title d-flex justify-content-center">
-                            <strong>@caserne.Nom</strong>
-                        </div>
+        <div class="row">
+            @foreach (CaserneDTO caserne in ViewBag.ListeCaserne)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card rounded">
                         <div class="card-body">
-                            <div class="infoCaserne d-flex flex-column justify-content-left">
-                                <p>Adresse : @caserne.Adresse</p>
-                                <p>Ville : @caserne.Ville</p>
-                                <p>Province : @caserne.Province</p>
-                                <p>Téléphone : @caserne.Telephone</p>
-                            </div>
-                            <div class="boutonsAction d-flex justify-content-center">
-                                <input class="btn-primary rounded" value="Modifier" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/FormulaireModifierCaserne'; this.form.method='get'; submit();" type="button" />
-                                <input class="btn-danger rounded m-1" value="Supprimer" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/SupprimerCaserne'; this.form.method='post'; submit();" type="button" />
-                            <input class="bg-info rounded m-1" type="button" value="Interventions" onclick="document.getElementById('nomCaserne').value  = '@caserne.Nom'; document.getElementById('matriculeCapitaine').value  = '0';  this.form.action='/Intervention?nomCaserne=@caserne.Nom'; this.form.method='get'; submit();" />
-
+                            <h5 class="card-title">@caserne.Nom</h5>
+                            <p class="card-text">Adresse : @caserne.Adresse</p>
+                            <p class="card-text">Ville : @caserne.Ville</p>
+                            <p class="card-text">Province : @caserne.Province</p>
+                            <p class="card-text">Téléphone : @caserne.Telephone</p>
+                            <hr />
+                            <div class="text-center">
+                                <input class="btn btn-warning rounded" value="Modifier" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/FormulaireModifierCaserne'; this.form.method='get'; submit();" type="button" />
+                                <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/SupprimerCaserne'; this.form.method='post'; submit();" type="button" />
+                                <input class="btn btn-primary rounded ml-1" type="button" value="Interventions" onclick="document.getElementById('nomCaserne').value  = '@caserne.Nom'; document.getElementById('matriculeCapitaine').value  = '0';  this.form.action='/Intervention?nomCaserne=@caserne.Nom'; this.form.method='get'; submit();" />
                             </div>
                         </div>
                     </div>
-                
-
-
-                }
-            </div>
-            
-
-        <input id="matriculeCapitaine" nom="matriculeCapitaine" type="hidden" />"
+                </div>
+            }
+        </div>
+        <input id="matriculeCapitaine" name="matriculeCapitaine" type="hidden" />
         <input id="nomCaserne" name="nomCaserne" type="hidden" />
+        <div class="text-center">
+            <input class="btn btn-danger rounded" value="Vider la liste des casernes" onclick="this.form.action='/Caserne/ViderListeCaserne'; this.form.method='post'; submit();" type="button" />
+        </div>
     </form>
-    <br />
-    <br />
     <hr />
     <div class="card border-2 rounded" style="width:20rem;">
-
-        <b class="card-title d-flex justify-content-center">Ajouter une caserne</b>
-        <br />
-        @*Formulaire de l'ajout d'une caserne*@
-        <div class="card-body d-flex justify-content-center">
+        <div class="card-body">
+            <h5 class="card-title text-center">Ajouter une caserne</h5>
             <form asp-controller="Caserne" asp-action="AjouterCaserne" method="post">
-                <table>
-                    <tr>
-                        <td>
-                            <label asp-for="Nom"></label>
-                        </td>
-                        <td>
-                            <input asp-for="Nom" required />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label asp-for="Adresse"></label>
-                        </td>
-                        <td>
-                            <input asp-for="Adresse" required />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label asp-for="Ville"></label>
-                        </td>
-                        <td>
-                            <input asp-for="Ville" required />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label asp-for="Province"></label>
-                        </td>
-                        <td>
-                            <input asp-for="Province" required />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label asp-for="Telephone"></label>
-                        </td>
-                        <td>
-                            <input asp-for="Telephone" required />
-                        </td>
-                    </tr>
-                </table>
-                <div class="d-flex justify-content-center">
-                <input class="m-1 btn-success rounded"type="submit" value="Ajouter" />
+                <div class="form-group">
+                    <label asp-for="Nom">Nom</label>
+                    <input asp-for="Nom" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Adresse">Adresse</label>
+                    <input asp-for="Adresse" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ville">Ville</label>
+                    <input asp-for="Ville" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Province">Province</label>
+                    <input asp-for="Province" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Telephone">Téléphone</label>
+                    <input asp-for="Telephone" class="form-control" required />
+                </div>
+                <br/>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success rounded">Ajouter</button>
                 </div>
             </form>
-            <br />
         </div>
     </div>
 }

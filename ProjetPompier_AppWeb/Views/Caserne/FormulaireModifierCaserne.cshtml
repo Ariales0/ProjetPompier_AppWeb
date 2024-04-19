@@ -1,67 +1,52 @@
 ﻿@using ProjetPompier_AppWeb.Logics.Models
 @model CaserneDTO;
-@*Si erreur du côté serveur... affichage du message d'erreur...*@
+@* Si erreur du côté serveur... affichage du message d'erreur... *@
 @if (ViewBag.MessageErreur != null)
 {
     <br />
-    <h2 class="alert-danger">@ViewBag.MessageErreur</h2>
+    <div class="alert alert-danger">@ViewBag.MessageErreur</div>
 }
 else
 {
     <br />
     <h3>Modifier une caserne : </h3>
-    <br />
-    @*Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierCaserne du controleur CaserneController*@
+    <hr/>
+    @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierCaserne du controleur CaserneController *@
     <form asp-controller="Caserne" asp-action="ModifierCaserne" method="post">
-        <table>
-            <tr>
-                <td>
-                    <label asp-for="Nom"></label>
-                </td>
-                <td>
-                    <input asp-for="Nom" class="inputreadonly" readonly />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label asp-for="Adresse"></label>
-                </td>
-                <td>
-                    <input asp-for="Adresse" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label asp-for="Ville"></label>
-                </td>
-                <td>
-                    <input asp-for="Ville" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label asp-for="Province"></label>
-                </td>
-                <td>
-                    <input asp-for="Province" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label asp-for="Telephone"></label>
-                </td>
-                <td>
-                    <input asp-for="Telephone" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="btn-primary"type="submit" value="Modifier" />
-                </td>
-                <td>
-                    <input class="btn-danger"type="button" value="Annuler" onclick="history.back();" />
-                </td>
-            </tr>
-        </table>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Nom" class="control-label"></label>
+                        <input asp-for="Nom" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Adresse" class="control-label"></label>
+                        <input asp-for="Adresse" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Ville" class="control-label"></label>
+                        <input asp-for="Ville" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Province" class="control-label"></label>
+                        <input asp-for="Province" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Telephone" class="control-label"></label>
+                        <input asp-for="Telephone" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="submit" class="btn btn-primary" value="Modifier" />
+                    <input type="button" class="btn btn-danger" value="Annuler" onclick="history.back();" />
+                </div>
+            </div>
+        </div>
     </form>
 }

@@ -1,0 +1,83 @@
+﻿@using ProjetPompier_AppWeb.Logics.Models;
+
+@if (ViewBag.MessageErreur != null)
+{
+    <br />
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.MessageErreur
+    </div>
+}
+else
+{
+    <form asp-controller="Pompier" asp-action="Index" method="get">
+        <div class="jumbotron">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="nomCaserne">Caserne choisie :</label>
+                    <select id="nomCaserne" name="nomCaserne" class="form-control">
+                        @foreach (CaserneDTO caserne in ViewBag.ListeCaserne)
+                        {
+                            if (caserne.Nom.Equals(ViewBag.NomCaserne))
+                            {
+                                <option value="@caserne.Nom" selected>@caserne.Nom</option>
+                            }
+                            else
+                            {
+                                <option value="@caserne.Nom">@caserne.Nom</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <br />
+                <div class="form-group col-md-6">
+                    <label for="seulementCapitaine">Afficher que les capitaines :</label>
+                    <select id="seulementCapitaine" name="seulementCapitaine" class="form-control">
+                        @if (ViewBag.SeulementCapitaine == "true")
+                        {
+                            <option value="true" selected>Oui</option>
+                            <option value="false">Non</option>
+                        }
+                        else
+                        {
+                            <option value="false" selected>Non</option>
+                            <option value="true">Oui</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-success">Recherche</button>
+        </div>
+    </form>
+
+    @if (ViewBag.ListePompier.Count > 0)
+    {
+        <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+            <p>Il y a <span class="fw-bold">@ViewBag.ListePompier.Count</span> pompier(s) dans la caserne "<span class="fw-bold">@ViewBag.NomCaserne</span>"</p>
+        </div>
+        <hr />
+        <div class="row">
+            @foreach (PompierDTO pompier in ViewBag.ListePompier)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">@pompier.Prenom @pompier.Nom</h5>
+                            <br />
+                            <p class="card-text"># @pompier.Grade</p>
+                            <p class="card-text">Matricule : @pompier.Matricule</p>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+            <p>Il y a <span class="fw-bold">aucun</span> pompier(s) pour la caserne "<span class="fw-bold">@ViewBag.NomCaserne</span>"</p>
+        </div>
+        <hr />
+    }
+}
