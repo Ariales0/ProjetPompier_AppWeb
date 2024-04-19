@@ -57,6 +57,7 @@ else
             <p>Il y a <span class="fw-bold">@ViewBag.ListePompier.Count</span> pompier(s) dans la caserne "<span class="fw-bold">@ViewBag.NomCaserne</span>"</p>
         </div>
         <hr />
+        <form asp-controller="" asp-action="" method="post">
         <div class="row">
             @foreach (PompierDTO pompier in ViewBag.ListePompier)
             {
@@ -68,11 +69,17 @@ else
                             <p class="card-text"># @pompier.Grade</p>
                             <p class="card-text">Matricule : @pompier.Matricule</p>
                             <hr />
+                            <div class="text-center">
+                                    <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer la pompier : @pompier.Nom @pompier.Prenom ?')) {document.getElementById('matriculePompier').value ='@pompier.Matricule'; this.form.action='/Pompier/SupprimerPompier'; this.form.method='post'; submit();}" type="button" />
+                            </div>                           
                         </div>
                     </div>
                 </div>
             }
         </div>
+        <input id="matriculePompier" name="matriculePompier" type="hidden" />
+            <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
+        </form>
     }
     else
     {
@@ -114,7 +121,7 @@ else
         <div class="text-center">
             <button type="submit" class="btn btn-success">Ajouter</button>
         </div>
-        <input type="hidden" id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne">
+            <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
     </div>
     </form>
 }

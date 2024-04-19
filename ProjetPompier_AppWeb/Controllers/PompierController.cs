@@ -79,5 +79,25 @@ namespace ProjetPompier_AppWeb.Controllers
             return RedirectToAction("Index", "Pompier", new { nomCaserne = nomCaserne });
         }
 
+
+        [Route("Pompier/SupprimerPompier")]
+        [HttpPost]
+        public async Task<IActionResult> SupprimerPompier(string nomCaserne, int matriculePompier)
+        {
+            // Appeler le service web pour supprimer un pompier
+            try
+            {
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/SupprimerPompier?nomCaserne=" + nomCaserne + "&matriculePompier=" + matriculePompier, null);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+                //Mettre cette ligne en commentaire avant de lancer les tests fonctionnels
+                TempData["MessageErreur"] = e.Message;
+            }
+            // Rediriger vers l'index pompier
+            return RedirectToAction("Index", "Pompier", new { nomCaserne = nomCaserne });
+        }
+
     }
 }
