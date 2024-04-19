@@ -1,4 +1,5 @@
 ﻿@using ProjetPompier_AppWeb.Logics.Models;
+@model PompierDTO;
 
 @if (ViewBag.MessageErreur != null)
 {
@@ -80,4 +81,33 @@ else
         </div>
         <hr />
     }
+
+    <hr />
+    <form asp-controller="Pompier" asp-action="AjouterPompier" method="post" class="need-validation">
+    <div class="container">
+        <div class="text-center">
+            <h1>Ajouter un pompier</h1>
+        </div>
+        <div class="form-group">
+            <label asp-for="Matricule" class="control-label"></label>
+            <input asp-for="Matricule" class="form-control" placeholder="Matricule (uniquement des chiffres)" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Nom" class="control-label"></label>
+            <input asp-for="Nom" class="form-control" placeholder="Nom du pompier" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Prenom" class="control-label"></label>
+            <input asp-for="Prenom" class="form-control" placeholder="Prénom du pompier" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Grade" class="control-label"></label>
+            <input asp-for="Grade" class="form-control" required />
+        </div>
+        <br />
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+    </div>
+    </form>
 }
