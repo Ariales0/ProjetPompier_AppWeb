@@ -71,15 +71,22 @@ else
                             <hr />
                             <div class="text-center">
                                     <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer la pompier : @pompier.Nom @pompier.Prenom ?')) {document.getElementById('matriculePompier').value ='@pompier.Matricule'; this.form.action='/Pompier/SupprimerPompier'; this.form.method='post'; submit();}" type="button" />
-                                    <input class="btn btn-primary rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('matriculePompier').value ='@pompier.Matricule'; this.form.action='/Pompier/FormulaireModifierPompier'; this.form.method='get'; submit();" />
+                                    <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('matriculePompier').value ='@pompier.Matricule'; this.form.action='/Pompier/FormulaireModifierPompier'; this.form.method='get'; submit();" />
+                                    @if (pompier.Grade.Equals("Capitaine"))
+                                    {
+                                        <input class="btn btn-primary rounded ml-1" type="button" value="Interventions" onclick="document.getElementById('nomCaserne').value  = '@ViewBag.NomCaserne'; document.getElementById('matriculeCapitaine').value  = '@pompier.Matricule';  this.form.action='/Intervention?nomCaserne=@ViewBag.NomCaserne&matriculeCapitaine=@pompier.Matricule'; this.form.method='get'; submit();" />
+                                    }
                             </div>                           
                         </div>
                     </div>
                 </div>
             }
         </div>
-        <input id="matriculePompier" name="matriculePompier" type="hidden" />
+            <input id="matriculePompier" name="matriculePompier" type="hidden" />
             <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
+            <div class="text-center">
+                <input class="btn btn-danger rounded" value="Vider la liste des pompiers" onclick=" if (confirm('Voulez-vous vraiment vider la liste de pompier?')) {this.form.action='/Pompier/ViderListePompier'; this.form.method='post'; submit();}" type="button" />
+            </div>
         </form>
     }
     else
