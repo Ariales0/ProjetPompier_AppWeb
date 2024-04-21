@@ -24,6 +24,13 @@
             Description = description;
         }
 
+        /// <summary>
+        /// Constructeur vide.
+        /// </summary>
+        public GradeDTO()
+        {
+        }
+
         #endregion Constructeurs
     }
 }

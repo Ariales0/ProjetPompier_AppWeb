@@ -17,5 +17,22 @@ namespace ProjetPompier_AppWeb.Controllers
             ViewBag.ListeGrade = listeGradeDTO;
             return View();
         }
+
+        [Route("/Grade/AjouterGrade")]
+        [HttpPost]
+        public async Task<IActionResult> AjouterGrade(GradeDTO grade)
+        {
+            try
+            {
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Grade/AjouterGrade", grade);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+                TempData["MessageErreur"] = e.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
