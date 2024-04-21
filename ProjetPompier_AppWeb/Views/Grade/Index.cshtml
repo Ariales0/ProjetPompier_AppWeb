@@ -1,0 +1,40 @@
+﻿@using ProjetPompier_AppWeb.Logics.Models;
+@model GradeDTO;
+@* Si erreur du côté serveur... affichage du message d'erreur... *@
+@if (ViewBag.MessageErreur != null)
+{
+    <div class="container">
+        <br />
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.MessageErreur
+        </div>
+    </div>
+}
+else
+{
+    @* Affichage de la liste des casernes... *@
+    <div class="container">
+        <br />
+        <h3>Liste des Grade(s) (@ViewBag.ListeGrade.Count) :</h3>
+        <br />
+        <form asp-controller="" asp-action="" method="post">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Action</th>
+            </thead>
+            <tbody>
+                    @foreach (GradeDTO grade in ViewBag.ListeGrade)
+                {
+                    <tr>
+                        <td>@grade.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        </form>
+        <br />
+</div>
+}

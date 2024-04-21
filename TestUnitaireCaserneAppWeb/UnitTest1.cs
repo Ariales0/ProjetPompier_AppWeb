@@ -17,7 +17,7 @@ namespace TestUnitaireCaserneAppWeb
         /// Test fonctionnel de la fonction Idex du controleur CaserneController
         /// </summary>
         [Fact]
-        public void TestFonctionnel()
+        public void TestFonctionnelCaserne()
         {
             CaserneDTO caserneDTO = new CaserneDTO("Caserne Test", "Adresse Test", "Ville Test", "Province Test","Tel Test");
             CaserneController controleurCaserne = new CaserneController();
