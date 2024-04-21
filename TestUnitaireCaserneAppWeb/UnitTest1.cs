@@ -58,5 +58,42 @@ namespace TestUnitaireCaserneAppWeb
 
 
 		}
+
+        [Fact]
+        public void TestFonctionnelPompier()
+        {
+            string nomCaserne = "Test";
+            PompierDTO pompierDTO = new PompierDTO(3, "Grade Test", "Nom Test", "Prenom Test");
+            PompierController controleurPompier = new PompierController();
+
+            controleurPompier.AjouterPompier(nomCaserne ,pompierDTO);
+
+            ViewResult resultatPompier = (ViewResult)controleurPompier.Index("Caserne Test", 3).Result;
+
+            List<PompierDTO> listePompierDansBDD = new List<PompierDTO>((List<PompierDTO>)resultatPompier.ViewData["listePompier"]);
+
+            Assert.Equal(listePompierDansBDD[(listePompierDansBDD.Count) - 1].Nom, pompierDTO.Nom);
+
+            controleurPompier.SupprimerPompier(nomCaserne ,pompierDTO.Matricule);
+
+        }
+
+        [Fact]
+        public void TestFonctionnelGrade()
+        {
+            GradeDTO gradeDTO = new GradeDTO("Grade Test");
+            GradeController controleurGrade = new GradeController();
+
+            controleurGrade.AjouterGrade(gradeDTO);
+
+            ViewResult resultatGrade = (ViewResult)controleurGrade.Index().Result;
+
+            List<GradeDTO> listeGradeDansBDD = new List<GradeDTO>((List<GradeDTO>)resultatGrade.ViewData["ListeGrade"]);
+
+            Assert.Equal(listeGradeDansBDD[(listeGradeDansBDD.Count) - 1].Description, gradeDTO.Description);
+
+            controleurGrade.SupprimerGrade(gradeDTO.Description);
+
+        }
 	}
 }
