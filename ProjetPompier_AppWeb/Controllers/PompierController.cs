@@ -94,6 +94,9 @@ namespace ProjetPompier_AppWeb.Controllers
                 // Appeler le service web pour obtenir un pompier
                 JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirPompier?nomCaserne=" + nomCaserne + "&matriculePompier=" + matriculePompier);
                 PompierDTO pompierDTO = JsonConvert.DeserializeObject<PompierDTO>(jsonResponse.ToString());
+                jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Grade/ObtenirListeGrade");
+                List<GradeDTO> listeGradeDTO = JsonConvert.DeserializeObject<List<GradeDTO>>(jsonResponse.ToString());
+                ViewBag.ListeGrade = listeGradeDTO;
                 ViewBag.NomCaserne = nomCaserne;
                 return View(pompierDTO);
             }

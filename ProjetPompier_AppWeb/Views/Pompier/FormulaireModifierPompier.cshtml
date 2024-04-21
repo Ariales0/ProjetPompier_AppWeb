@@ -30,7 +30,19 @@ else
                     </div>
                     <div class="form-group">
                         <label asp-for="Grade" class="control-label"></label>
-                        <input asp-for="Grade" class="form-control" />
+                        <select asp-for="Grade" class="form-control">
+                            @foreach (GradeDTO grade in ViewBag.ListeGrade)
+                            {
+                                if (grade.Description.Equals(Model.Grade))
+                                {
+                                    <option value="@grade.Description" selected>@grade.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@grade.Description">@grade.Description</option>
+                                }
+                            }
+                        </select>
                     </div>
 
                 </div>
