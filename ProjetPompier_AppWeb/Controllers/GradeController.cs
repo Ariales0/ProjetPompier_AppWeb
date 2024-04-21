@@ -34,5 +34,52 @@ namespace ProjetPompier_AppWeb.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Route("/Grade/FormulaireModifierGrade")]
+        [HttpGet]
+        public async Task<IActionResult> FormulaireModifierGrade(string description)
+        {
+            JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Grade/ObtenirGrade?description=" + description);
+            GradeDTO gradeDTO = JsonConvert.DeserializeObject<GradeDTO>(jsonResponse.ToString());
+            ViewBag.descriptionAvantChangement = description;
+
+            return View();
+        }
+
+
+
+        [Route("/Grade/ModifierGrade")]
+        [HttpPost]
+        public async Task<IActionResult> ModifierGrade(string descriptionAvantChangement, GradeDTO grade)
+        {
+            try
+            {
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Grade/ModifierGrade?descriptionAvantChangement=" + descriptionAvantChangement + "&descriptionApresChangement=" + grade.Description, null);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+                TempData["MessageErreur"] = e.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [Route("/Grade/SupprimerGrade")]
+        [HttpPost]
+        public async Task<IActionResult> SupprimerGrade(string description)
+        {
+            try
+            {
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Grade/SupprimerGrade?description=" + description, null);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+                TempData["MessageErreur"] = e.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
