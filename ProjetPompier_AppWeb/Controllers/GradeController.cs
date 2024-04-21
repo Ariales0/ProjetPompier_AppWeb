@@ -8,6 +8,10 @@ namespace ProjetPompier_AppWeb.Controllers
 {
     public class GradeController : Controller
     {
+        /// <summary>
+        /// Méthode de service appelé lors de l'action Index.
+        /// </summary>
+        /// <returns>Retourne l'index</returns>
         [Route("Grade")]
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -18,6 +22,11 @@ namespace ProjetPompier_AppWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Méthode de service appelé lors de l'action AjouterGrade.
+        /// </summary>
+        /// <param name="grade">Le gardeDTO</param>
+        /// <returns></returns>
         [Route("/Grade/AjouterGrade")]
         [HttpPost]
         public async Task<IActionResult> AjouterGrade(GradeDTO grade)
@@ -35,6 +44,11 @@ namespace ProjetPompier_AppWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Méthode de service appelé lors de l'action FormulaireModifierGrade.
+        /// </summary>
+        /// <param name="description">La description du grade</param>
+        /// <returns></returns>
         [Route("/Grade/FormulaireModifierGrade")]
         [HttpGet]
         public async Task<IActionResult> FormulaireModifierGrade(string description)
@@ -47,7 +61,12 @@ namespace ProjetPompier_AppWeb.Controllers
         }
 
 
-
+        /// <summary>
+        /// Méthode de service appelé lors de l'action ModifierGrade.
+        /// </summary>
+        /// <param name="descriptionAvantChangement">Description avant changement</param>
+        /// <param name="grade">Le nouveau gradeDTO</param>
+        /// <returns></returns>
         [Route("/Grade/ModifierGrade")]
         [HttpPost]
         public async Task<IActionResult> ModifierGrade(string descriptionAvantChangement, GradeDTO grade)
@@ -65,6 +84,11 @@ namespace ProjetPompier_AppWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Méthode de service appelé lors de l'action SupprimerGrade.
+        /// </summary>
+        /// <param name="description">Description du grade</param>
+        /// <returns></returns>
         [Route("/Grade/SupprimerGrade")]
         [HttpPost]
         public async Task<IActionResult> SupprimerGrade(string description)
@@ -72,6 +96,27 @@ namespace ProjetPompier_AppWeb.Controllers
             try
             {
                 await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Grade/SupprimerGrade?description=" + description, null);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+                TempData["MessageErreur"] = e.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Méthode de service appelé lors de l'action ViderListeGrade.
+        /// </summary>
+        /// <returns></returns>
+        [Route("/Grade/ViderListeGrade")]
+        [HttpPost]
+        public async Task<IActionResult> ViderListeGrade()
+        {
+            try
+            {
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Grade/ViderListeGrade", null);
             }
             catch (Exception e)
             {

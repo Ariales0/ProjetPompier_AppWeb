@@ -38,7 +38,11 @@ else
             </tbody>
         </table>
             <input id="description" name="description" type="hidden" />
+            <div class="text-center">
+                <input class="btn btn-danger rounded" value="Vider la liste des grades" onclick=" if (confirm('Voulez-vous vraiment vider la liste des grades?')) {this.form.action='/Pompier/ViderListeGrade'; this.form.method='post'; submit();}" type="button" />
+            </div>
         </form>
+
         <br />
         <hr />
     </div>
