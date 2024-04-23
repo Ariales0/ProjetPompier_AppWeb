@@ -1,0 +1,78 @@
+﻿@using ProjetPompier_AppWeb.Logics.Models;
+@model TypeVehiculeDTO;
+
+@* Si une erreur est detecté,  on l'affiche... *@
+@if (ViewBag.MessageErreur != null)
+{
+    <br />
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.MessageErreur
+    </div>
+}
+
+    @if (ViewBag.ListeTypeVehicule.Count > 0)
+    {
+        <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+        <p>Il y a <span class="fw-bold">@ViewBag.ListeTypeVehicule.Count</span> type(s)de véhicule(s) "<span class="fw-bold">@ViewBag.TypeVehicule</span>"</p>
+        </div>
+        <hr />
+        <form asp-controller="" asp-action="" method="post">
+        <div class="row">
+            @foreach (TypeVehiculeDTO typeVehicule in ViewBag.ListeTypeVehicule)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">@typeVehicule.Type </h5>
+                            <br/>
+                            <p class="card-text">Code : @typeVehicule.Code</p>
+                            <p class="card-text">Nombre de place : @typeVehicule.NombrePersonne</p>
+                            <hr/>
+                            <div class="text-center">
+                                    <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le type de véhicule : @typeVehicule.Type ?')) {document.getElementById('codeVehicule').value ='@typeVehicule.Code'; this.form.action='/TypeVehicule/SupprimerTypeVehicule'; this.form.method='post'; submit();}" type="button" />
+                                <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('codeVehicule').value ='@typeVehicule.Code'; this.form.action='/TypeVehicule/FormulaireModifierTypeVehicule'; this.form.method='get'; submit();" />
+                            </div>                           
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <input id="codeVehicule" name="codeVehicule" type="hidden" />
+            <div class="text-center">
+            <input class="btn btn-danger rounded" value="Vider la liste des type de véhicules" onclick=" if (confirm('Voulez-vous vraiment vider liste des type de véhicules?')) {this.form.action='/TypeVehicule/ViderListeTypeVehicule'; this.form.method='post'; submit();}" type="button" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+            <p>Il y a <span class="fw-bold">aucun</span> type(s) de véhicules enregistrés.</p>
+        </div>
+        <hr />
+    }
+
+    <hr />
+<form asp-controller="TypeVehicule" asp-action="AjouterTypeVehicule" method="post" class="need-validation">
+    <div class="container">
+        <div class="text-center">
+            <h1>Ajouter un type de véhicule</h1>
+        </div>
+        <div class="form-group">
+            <label asp-for="Code" class="control-label">Code du véhicule :</label>
+            <input asp-for="Code" class="form-control" placeholder="123" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Type" class="control-label">Type du véhicule :</label>
+            <input asp-for="Type" class="form-control" placeholder="Type de véhicule" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="NombrePersonne" class="control-label">Nombre de place disponible dans le véhicule :</label>
+            <input asp-for="NombrePersonne" class="form-control" placeholder="Prénom du pompier" required />
+        </div>
+        <br />
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+    </div>
+    </form>
+

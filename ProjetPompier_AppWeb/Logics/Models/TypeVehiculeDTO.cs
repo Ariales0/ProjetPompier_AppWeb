@@ -2,7 +2,7 @@
 /// <summary>
 /// Namespace pour les classe de type DTOs.
 /// </summary>
-namespace AppMobile_ProjetPompierC.DTO
+namespace ProjetPompier_AppWeb.Logics.Models
 {
     /// <summary>
     /// Classe représentant le DTO d'un type de véhicule.

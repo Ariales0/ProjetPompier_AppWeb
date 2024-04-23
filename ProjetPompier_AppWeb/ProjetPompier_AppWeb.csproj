@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Vehicule\" />
-    <Folder Include="Views\TypeVehicule\" />
   </ItemGroup>
 
 </Project>
