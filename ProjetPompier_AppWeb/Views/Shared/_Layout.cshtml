@@ -3,15 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Tire de la page WEB-->
     <title>@ViewData["Title"] - ProjetPompier_AppWeb</title>
+    <!-- Liens de la css et des styles-->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ProjetPompier_AppWeb.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
+        <!-- Barre de navigation dans l'application WEB-->
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
+                <!-- Lien vers la liste des casernes, l'accueil de notre application -->
                 <a class="navbar-brand" asp-area="" asp-controller="Caserne" asp-action="Index">Gestion Pompier</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +60,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - ProjetPompier_AppWeb - Quentin Lecourt, Vincent Bouchard, Lyes Hamrani
+            <!--Auterus du projet-->
+            &copy; 2024 - ProjetPompier_AppWeb - Vincent Bouchard, Lyes Hamrani, Quentin Lecourt
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
