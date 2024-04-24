@@ -80,9 +80,9 @@
                                     @*Bouton supprimer pour chaque véhicule*@
                                     <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le véhicule : @intervention.TypeIntervention @intervention.Resume ?')) {document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/SupprimerIntervention'; this.form.method='post'; submit();}" type="button" />
                                     @*Bouton modifier pour chaque véhicule*@
-                                    <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireModifierIntervention'; this.form.method='post'; submit();" />
+                                    <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireModifierFicheIntervention'; this.form.method='post'; submit();" />
                                     @*Bouton fermer pour les interventions ouverte*@
-                                    <input class="btn btn-info rounded ml-1" type="button" value="Fermer" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireFermerIntervention'; this.form.method='post'; submit();" />
+                                    <input class="btn btn-info rounded ml-1" type="button" value="Fermer" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireFermerFicheIntervention'; this.form.method='post'; submit();" />
                                 </div>
                             }
                         </div>
