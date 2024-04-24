@@ -96,7 +96,7 @@ else
         </div>
         @*Ajout du Vin du véhicule*@
         <div class="form-group">
-            <label asp-for="VinVehicule" class="control-label"></label>
+            <label asp-for="VinVehicule" class="control-label">Vin du véhicule :</label>
             <input asp-for="VinVehicule" class="form-control" placeholder="1AB234CD5EF6G78H9" maxlength="17" required />
         </div>
 
@@ -120,6 +120,7 @@ else
 
         @*Champ de selection pour le code, le type, et la capicite du vehicule*@
         <div class="form-group">
+            <label asp-for="Code" class="control-label">Code du véhicule :</label>
             <select id="Code" name="Code" class="form-control" required onchange="rafraichirChamps()">
                 <option value="" disabled selected>Choisir un type de véhicule</option>
                 @foreach (TypeVehiculeDTO type in ViewBag.ListeTypeVehicule)
@@ -132,31 +133,31 @@ else
 
         @*Champ du type du vehicule*@
         <div class="form-group">
-            <label asp-for="Type" class="control-label"></label>
+            <label asp-for="Type" class="control-label">Type du véhicule :</label>
             <input id="Type" asp-for="Type" class="form-control" readonly />
         </div>
 
         @*Champ du nombre de place du vehicule*@
         <div class="form-group">
-            <label asp-for="NombrePersonne" class="control-label"></label>
+            <label asp-for="NombrePersonne" class="control-label">Nombre de personne possible dans le véhicule :</label>
             <input id="NombrePersonne" asp-for="NombrePersonne" class="form-control" readonly />
         </div>
 
         @*Ajout de la marque du vehicule*@
         <div class="form-group">
-            <label asp-for="Marque" class="control-label"></label>
+            <label asp-for="Marque" class="control-label">Marque du véhicule :</label>
             <input asp-for="Marque" class="form-control" placeholder="Marque" required />
         </div>
 
         @*Ajout du modele du vehicule*@
         <div class="form-group">
-            <label asp-for="Modele" class="control-label"></label>
+            <label asp-for="Modele" class="control-label">Modèle du véhicule :</label>
             <input asp-for="Modele" class="form-control" placeholder="Modele" required />
         </div>
 
         @*Selection de l'annee du vehicule*@
         <div class="form-group">
-            <label asp-for="Annee" class="control-label"></label>
+            <label asp-for="Annee" class="control-label">Annee de mise en circulation du véhicule :</label>
             @*Recuperation de l'annee du systeme*@
             @{
                 int anneeActuelle = DateTime.Now.Year;
