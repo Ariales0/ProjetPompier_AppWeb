@@ -19,53 +19,47 @@ namespace ProjetPompier_AppWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine)
         {
-            JsonValue jsonResponseListeCaserneDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
-            List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponseListeCaserneDTO.ToString());
-
             try
             {
+                JsonValue jsonResponseListeCaserneDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
+                List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponseListeCaserneDTO.ToString());
+
                 if (nomCaserne == null || matriculeCapitaine == 0)
                 {
-                    nomCaserne = listeCaserneDTO[0].Nom;
-                    JsonValue jsonResponseListePompierDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
-                    List<PompierDTO> listePompierDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListePompierDTO.ToString());
+                    nomCaserne = listeCaserneDTO.FirstOrDefault()?.Nom;
+                    if (string.IsNullOrEmpty(nomCaserne))
+                    {
+                        ViewBag.MessageErreurCritique = "Aucune caserne trouvée.";
+                        return View();
+                    }
 
-                    if (listePompierDTO.Count == 0)
+                    JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListeCapitaine?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
+                    List<PompierDTO> listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
+                    if (listeCapitaineDTO.Count == 0)
                     {
                         ViewBag.MessageErreurCritique = "Aucun capitaine dans cette caserne";
                         return View();
                     }
-                    matriculeCapitaine = listePompierDTO[0].Matricule;
+
+                    matriculeCapitaine = listeCapitaineDTO[0].Matricule;
                 }
+
                 ViewBag.NomCaserne = nomCaserne;
-                ViewBag.MatriculePompier = matriculeCapitaine;
+                ViewBag.MatriculeCapitaine = matriculeCapitaine;
+                ViewBag.ListeCaserne = listeCaserneDTO;
+
+                JsonValue jsonResponseListeFicheIntervetionDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine);
+                List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
+                ViewBag.ListeFicheIntervention = listeFicheInterventionDTO;
+
+                return View();
 
             }
-
-
-            jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + caserneDTO.Nom + "&seulementCapitaine=" + true) ;
-            List<PompierDTO> listePompier = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponse.ToString());
-            ViewBag.listePompier = listePompier;
-            if(matriculeCapitaine == 0 && listePompier.Count > 0)
+            catch (Exception ex)
             {
-				matriculeCapitaine = listePompier[0].Matricule;
-			}
-            ViewBag.MatriculeCapitaine = matriculeCapitaine;
-
-            foreach (PompierDTO pompier in listePompier)
-            {
-                if(pompier.Matricule == matriculeCapitaine)
-                {
-                    ViewBag.NomPrenomCapitaine = pompier.Prenom + " " + pompier.Nom;
-                }
+                ViewBag.MessageErreurCritique = ex.Message;
+                return View();
             }
-            
-            jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + caserneDTO.Nom + "&matriculeCapitaine=" + matriculeCapitaine);
-            ViewBag.ListeIntervention = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponse.ToString());
-            
-            
-            await Task.Delay(0);
-            return View();
         }
 
         /// <summary>

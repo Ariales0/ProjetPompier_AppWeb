@@ -27,6 +27,12 @@ body {
     color: white;
 }
 
+.attention {
+    padding: 20px;
+    background-color: #ffd480;
+    color: white;
+}
+
 .closebtn {
     margin-left: 15px;
     color: white;
