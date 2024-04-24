@@ -23,7 +23,7 @@ else
     }
 
     @* Liste de selection de la caserne à laquelle appartient les interventions *@
-    <form asp-controller="Vehicule" asp-action="Index" method="get">
+    <form asp-controller="Intervention" asp-action="Index" method="get">
         <div class="jumbotron">
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -37,28 +37,26 @@ else
                     </select>
                 </div>
             </div>
-    </form>
 
-    @* Liste de selection des pompiers caiptaine à laquelle appartient les intervention *@
-    <form asp-controller="Vehicule" asp-action="Index" method="get">
-        <div class="jumbotron">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="MatriculeCapitaine">Pompier choisi :</label>
-                    <select id="MatriculeCapitaine" name="MatriculeCapitaine" class="form-control" onchange="this.form.submit()">
-                        @foreach (PompierDTO pompier in ViewBag.ListeCapitaine)
-                        {
-                            @* L'item sélectionné dans la liste est le matricule envoyée par la méthode Index du contrôleur *@
-                            <option value="@pompier.Matricule" selected="@pompier.Matricule == ViewBag.MatriculeCapitaine">@pompier.Nom @pompier.Prenom</option>
-                        }
-                    </select>
+            @* Liste de selection des pompiers caiptaine à laquelle appartient les intervention *@
+            <div class="jumbotron">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="MatriculeCapitaine">Pompier choisi :</label>
+                        <select id="MatriculeCapitaine" name="MatriculeCapitaine" class="form-control" onchange="this.form.submit()">
+                            @foreach (PompierDTO pompier in ViewBag.ListeCapitaine)
+                            {
+                                @* L'item sélectionné dans la liste est le matricule envoyée par la méthode Index du contrôleur *@
+                                <option value="@pompier.Matricule" selected="@pompier.Matricule == ViewBag.MatriculeCapitaine">@pompier.Nom @pompier.Prenom</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
     </form>
 
     <h1>Liste des interventions : </h1>
 
-    @if (ViewBag.ListeFicheIntervention.Count > 0)
+    @if (ViewBag.Message != "Aucune fiche d'intervention pour ce capitaine")
     {@*Nombre d'intervention du pompier de la caserne*@
         <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
             <p>
@@ -113,68 +111,52 @@ else
             </div>
         </form>
     }
-    else
-    {
-        @*Si aucune intervention est enregistrée pour ce pompier, alors on affiche le message ci-dessous*@
-        <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
-            <p><span class="fw-bold">Aucune</span> intervention pour ce pompier.</p>
+    <hr />
+    <div class="card border-2 rounded" style="width:20rem;">
+        <div class="card-body">
+            <h5 class="card-title text-center">Ouvrir une fiche d'intervention</h5>
+            @*Formulaire d'ouverture d'un fiche d'intervention*@
+            <form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
+
+                @*Ajout du type d'intervention*@
+                <div class="form-group">
+                    <label asp-for="TypeIntervention">Type d'intervention : </label>
+                    <input asp-for="TypeIntervention" class="form-control" required>
+                </div>
+
+                @*Ajout de l'adresse de l'intervention*@
+                <div class="form-group">
+                    <label asp-for="Adresse" class="control-label">Adresse : </label>
+                    <input asp-for="Adresse" class="form-control" required>
+                </div>
+
+                @*Ajout du résumé de l'intervention*@
+                <div class="form-group">
+                    <label asp-for="Resume" class="control-label">Résumé :</label>
+                    <input asp-for="Resume" class="form-control" required>
+                </div>
+                <br />
+                @*Bouton de validation de l'ouverture de la fiche d'intervention*@
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success rounded">Ouvrir</button>
+                </div>
+
+                @*Champ caché de la caserne où le pompier se trouve*@
+                <input type="hidden" value="@ViewBag.NomCaserne" id="matriculeCapitaine" name="nomCaserne">
+
+                @*Champ caché du matricule du capitaine*@
+                <input type="hidden" value="@ViewBag.MatriculeCapitaine" id="matriculeCapitaine" name="matriculeCapitaine">
+
+                @*Champ caché de l'objet FicheInterventionDTO pour le matricule du pompier capitaine en charge de l'intervention*@
+                <input type="hidden" value=@ViewBag.MatriculeCapitaine asp-for="MatriculeCapitaine">
+
+                @*Champ caché de l'objet FicheInterventionDTO pour le date de début de l'intervention, celle du système*@
+                <input type="hidden" value="@DateTime.Now" asp-for="DateDebut">
+
+                @*Champ caché de l'objet FicheInterventionDTO pour la date fin de l'intervention, pas definie *@
+                <input type="hidden" value="" asp-for="DateFin">
+            </form>
         </div>
-        <hr />
-    }
-
-    @if (ViewBag.ListeCapitaine.Count > 0)
-    {
-        <hr />
-        <div class="card border-2 rounded" style="width:20rem;">
-            <div class="card-body">
-                <h5 class="card-title text-center">Ouvrir une fiche d'intervention</h5>
-                @*Formulaire d'ouverture d'un fiche d'intervention*@
-                <form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
-
-                    @*Ajout du type d'intervention*@
-                    <div class="form-group">
-                        <label asp-for="TypeIntervention">Type d'intervention : </label>
-                        <input asp-for="TypeIntervention" class="form-control" required>
-                    </div>
-
-                    @*Ajout de l'adresse de l'intervention*@
-                    <div class="form-group">
-                        <label asp-for="Adresse" class="control-label">Adresse : </label>
-                        <input asp-for="Adresse" class="form-control" required>
-                    </div>
-
-                    @*Ajout du résumé de l'intervention*@
-                    <div class="form-group">
-                        <label asp-for="Resume" class="control-label">Résumé :</label>
-                        <input asp-for="Resume" class="form-control" required>
-                    </div>
-                    <br />
-                    @*Bouton de validation de l'ouverture de la fiche d'intervention*@
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-success rounded">Ouvrir</button>
-                    </div>
-
-                    @*Champ caché de la caserne où le pompier se trouve*@
-                    <input type="hidden" value="@ViewBag.NomCaserne" id="matriculeCapitaine" name="nomCaserne">
-
-                    @*Champ caché du matricule du capitaine*@
-                    <input type="hidden" value="@ViewBag.MatriculeCapitaine" id="matriculeCapitaine" name="matriculeCapitaine">
-
-                    @*Champ caché de l'objet FicheInterventionDTO pour le matricule du pompier capitaine en charge de l'intervention*@
-                    <input type="hidden" value=@ViewBag.MatriculeCapitaine asp-for="MatriculeCapitaine">
-
-                    @*Champ caché de l'objet FicheInterventionDTO pour le date de début de l'intervention, celle du système*@
-                    <input type="hidden" value="@DateTime.Now" asp-for="DateDebut">
-
-                    @*Champ caché de l'objet FicheInterventionDTO pour la date fin de l'intervention, pas definie *@
-                    <input type="hidden" value="" asp-for="DateFin">
-                </form>
-            </div>
-        </div>
-    }
-    else
-    {
-        <h5>Aucun pompier disponible pour l'ouverture d'une fiche d'intervention</h5>
-    }
+    </div>
 }
 

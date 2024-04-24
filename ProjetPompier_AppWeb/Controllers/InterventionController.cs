@@ -52,6 +52,11 @@ namespace ProjetPompier_AppWeb.Controllers
                 List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
                 ViewBag.ListeFicheIntervention = listeFicheInterventionDTO;
 
+                if (listeFicheInterventionDTO.Count == 0)
+                {
+                    ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
+                }
+
                 return View();
 
             }
@@ -85,9 +90,9 @@ namespace ProjetPompier_AppWeb.Controllers
             }
 
             //Lancement de l'action Index...
-            return RedirectToAction("Index", "Intervention", new {nomCaserne =nomCaserne, matriculeCapitaine = fiche.MatriculeCapitaine});
+            return RedirectToAction("Index", "Intervention", new { nomCaserne = nomCaserne, matriculeCapitaine = fiche.MatriculeCapitaine });
         }
 
-        
+
     }
 }
