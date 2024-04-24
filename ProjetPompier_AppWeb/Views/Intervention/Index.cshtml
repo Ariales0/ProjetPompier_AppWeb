@@ -4,117 +4,145 @@
 @* Si une erreur est detecté,  on l'affiche... *@
 @if (ViewBag.MessageErreur != null)
 {
-	<br />
-	<div class="alert">
-		<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-		<strong>Erreur!</strong> @ViewBag.MessageErreur .
-	</div>
+    <br />
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Erreur!</strong> @ViewBag.MessageErreur .
+    </div>
+}
+@* Liste de selection de la caserne à laquelle appartient les interventions *@
+<form asp-controller="Vehicule" asp-action="Index" method="get">
+    <div class="jumbotron">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="nomCaserne">Caserne choisie :</label>
+                <select id="nomCaserne" name="nomCaserne" class="form-control" onchange="this.form.submit()">
+                    @foreach (CaserneDTO caserne in ViewBag.ListeCaserne)
+                    {
+                        @* L'item sélectionné dans la liste est le nom de la caserne envoyée par la méthode Index du contrôleur *@
+                        <option value="@caserne.Nom" selected="@caserne.Nom == ViewBag.NomCaserne">@caserne.Nom</option>
+                    }
+                </select>
+            </div>
+        </div>
+</form>
+
+@* Liste de selection des pompiers caiptaine à laquelle appartient les intervention *@
+<form asp-controller="Vehicule" asp-action="Index" method="get">
+    <div class="jumbotron">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="matriculePompier">Pompier choisi :</label>
+                <select id="matriculePompier" name="matriculePompier" class="form-control" onchange="this.form.submit()">
+                    @foreach (PompierDTO pompier in ViewBag.ListePompier)
+                    {
+                        @* L'item sélectionné dans la liste est le matricule envoyée par la méthode Index du contrôleur *@
+                        <option value="@pompier.Matricule" selected="@pompier.Matricule == ViewBag.MatriculePompier">@pompier.Nom @pompier.Prenom</option>
+                    }
+                </select>
+            </div>
+        </div>
+</form>
+
+<h1>Liste des interventions : </h1>
+
+@if (ViewBag.ListeIntervention.Count > 0)
+{@*Nombre d'intervention du pompier de la caserne*@
+    <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+        <p>
+            Il y a
+            <span class="fw-bold">@ViewBag.ListeIntervention.Count</span>
+            @(ViewBag.ListeIntervention.Count > 1 ? "interventions" : "intervention") pour ce pompier.
+        </p>
+    </div>
+    <hr />
+    @*Formulaire de la liste des interventions, pour modifier, supprimer ou vider la liste*@
+    <form asp-controller="" asp-action="" method="post">
+        <div class="row">
+            @foreach (FicheInterventionDTO intervention in ViewBag.ListeIntervention)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">@intervention.TypeIntervention</h5>
+                            <br />
+                            <p class="card-text">Date d'ouverture : @intervention.DateDebut</p>
+                            <p class="card-text">Adresse : @intervention.Adresse</p>
+                            <p class="card-text">Resumé : @intervention.Resume</p>
+                            <hr />
+                            @if (intervention.DateFin != "")
+                            {
+                                <p class="card-text">Date de fermeture : @intervention.DateFin</p>
+                            }
+                            else
+                            {
+                                <div class="text-center">
+                                    @*Bouton supprimer pour chaque véhicule*@
+                                    <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le véhicule : @intervention.TypeIntervention @intervention.Resume ?')) {document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/SupprimerIntervention'; this.form.method='post'; submit();}" type="button" />
+                                    @*Bouton modifier pour chaque véhicule*@
+                                    <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireModifierIntervention'; this.form.method='post'; submit();" />
+                                    @*Bouton fermer pour les interventions ouverte*@
+                                    <input class="btn btn-info rounded ml-1" type="button" value="Fermer" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireFermerIntervention'; this.form.method='post'; submit();" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @*Champs cachés pour l'envoie aux méthodes du controleur*@
+        <input id="dateDebut" name="dateDebut" type="hidden" />
+        <input type="hidden" value="@DateTime.Now" id="dateDebut" name="dateDebut">
+        <input id="matriculePompier" name="matriculePompier" value="@ViewBag.MatriculePompier" type="hidden" />
+        <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
+        @*Vider la liste des interventions pour ce pompier*@
+        <div class="text-center">
+            <input class="btn btn-danger rounded" value="Vider la liste des interventions" onclick=" if (confirm('Voulez-vous vraiment vider la liste des interventions?')) {this.form.action='/Intervention/ViderListeIntervention'; this.form.method='post'; submit();}" type="button" />
+        </div>
+    </form>
 }
 else
 {
-    <h1>Liste des interventions : </h1>
-    <div class="card background-color-gray">
-		<div class="card-body">
-			<h2>@ViewBag.NomCaserne</h2>
-
-			<form asp-controller="Intervention" asp-action="Index" method="get">
-
-				<select name="matriculeCapitaine" onchange="submit()">
-					@if(ViewBag.listePompier.Count > 0)
-					{
-						@foreach (PompierDTO pompier in ViewBag.ListePompier)
-						{
-							if (pompier.Matricule.Equals(ViewBag.MatriculeCapitaine))
-							{
-								<option value="@pompier.Matricule" selected>@pompier.Prenom @pompier.Nom</option>
-							}
-							else
-							{
-								<option value="@pompier.Matricule">@pompier.Prenom @pompier.Nom</option>
-							}
-						}
-					}
-					else
-						{
-							<option value="">Aucun pompier</option>
-						}
-					}
-					
-				</select>
-				<input type="hidden" id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne">
-			</form>
-			@if(ViewBag.listePompier.Count > 0)
-			{
-				<div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
-					<p>Il y a <span class="fw-bold">@ViewBag.ListeIntervention.Count</span> Fiches pour le capitaine "<span class="fw-bold">@ViewBag.NomPrenomCapitaine</span>"</p>
-				</div>
-
-			}
-			<div class="card-deck d-flex flex-row">
-			@foreach (FicheInterventionDTO fiche in ViewBag.ListeIntervention)
-			{
-				<div class="card d-flex rounded m-2" style="width:15rem;">
-					<div class="">
-						<h3>@fiche.TypeIntervention</h3>
-						<br>
-						<p>Adresse : @fiche.Adresse</p>
-						<p>Date et heure : @fiche.DateTemps</p>
-						<p>Résumé : @fiche.Resume</p>
-						<hr>
-					</div>
-						<div class="d-flex justify-content-center">
-						<button class="btn btn-warning">Détails</button>
-					</div>
-				</div>
-			}
-			</div>
-		</div>
-		<hr>
-
-		<div class="ajoutFicheIntervention">
-			<h2>Ouverture d'une fiche d'intervention</h2>
-			@if (ViewBag.listePompier.Count > 0)
-			{
-				<form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
-					<table>
-						<tr>
-							<td>
-								<label asp-for="TypeIntervention">Type d'intervention : </label>
-							</td>
-							<td>
-								<input asp-for="TypeIntervention">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label asp-for="Adresse">Adresse : </label>
-							</td>
-							<td>
-								<input asp-for="Adresse">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label asp-for="Resume">Résumé</label>
-							</td>
-							<td>
-								<input asp-for="Resume">
-							</td>
-						</tr>
-					</table>
-					<div class="d-flex justify-content-center">
-						<input class="m-1 btn-success rounded" type="submit" value="Ouvrir">
-					</div>
-					<input type="hidden" value="@ViewBag.NomCaserne" name="nomCaserne">
-					<input type="hidden" value="@DateTime.Now" name="dateTemps" asp-for="DateTemps">
-					<input type="hidden" value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine" asp-for="MatriculeCapitaine">
-				</form>
-			}
-			else
-			{
-				<h5>Aucun pompier disponible pour l'ouverture d'une fiche d'intervention</h5>
-			}
-			
-		</div>
+    @*Si aucune intervention est enregistrée pour ce pompier, alors on affiche le message ci-dessous*@
+    <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+        <p><span class="fw-bold">Aucune</span> intervention pour ce pompier.</p>
     </div>
+    <hr />
 }
+
+    @if (ViewBag.ListePompier.Count > 0)
+    {
+    <hr />
+    <div class="card border-2 rounded" style="width:20rem;">
+        <div class="card-body">
+            <h5 class="card-title text-center">Ouvrir une fiche d'intervention</h5>
+            <form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
+                <div class="form-group">
+                    <label asp-for="TypeIntervention">Type d'intervention : </label>
+                    <input asp-for="TypeIntervention" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Adresse" class="control-label">Adresse : </label>
+                    <input asp-for="Adresse" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Resume" class="control-label">Résumé :</label>
+                    <input asp-for="Resume" class="form-control" required>
+                </div>
+                <br />
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success rounded">Ouvrir</button>
+                </div>
+                <input type="hidden" value="@ViewBag.NomCaserne" id="matriculeCapitaine" name="nomCaserne">
+                <input type="hidden" value="@DateTime.Now" asp-for="DateDebut">
+                <input type="hidden" value="" asp-for="DateFin">
+                <input type="hidden" value="@ViewBag.MatriculeCapitaine" id="matriculeCapitaine" name="matriculeCapitaine">
+            </form>
+        </div>
+    </div>
+            
+    }
+    else
+    {
+        <h5>Aucun pompier disponible pour l'ouverture d'une fiche d'intervention</h5>
+    }
