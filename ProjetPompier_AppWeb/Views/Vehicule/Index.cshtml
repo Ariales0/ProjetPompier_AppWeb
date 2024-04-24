@@ -1,5 +1,163 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using ProjetPompier_AppWeb.Logics.Models;
+@model VehiculeDTO;
+
+@* Si une erreur est detecté,  on l'affiche... *@
+@if (ViewBag.MessageErreur != null)
+{
+    <br />
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.MessageErreur
+    </div>
 }
+
+@* Liste de selection de la caserne a laquelle appartient les vehicules *@
+<form asp-controller="Vehicule" asp-action="Index" method="get">
+    <div class="jumbotron">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="nomCaserne">Caserne choisie :</label>
+                <select id="nomCaserne" name="nomCaserne" class="form-control" onchange="this.form.submit()">
+                    @foreach (CaserneDTO caserne in ViewBag.ListeCaserne)
+                    {
+                        @* L'item sélectionne dans la liste est le nom de la caserne envoyeé par la methode index du controleur *@
+                        if (caserne.Nom.Equals(ViewBag.NomCaserne))
+                        {
+                            <option value="@caserne.Nom" selected>@caserne.Nom</option>
+                        }
+                        else
+                        {
+                            <option value="@caserne.Nom">@caserne.Nom</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+</form>
+
+@if (ViewBag.ListeVehicule.Count > 0)
+{@*Nombre de véhicule dans la caserne*@
+    <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+        <p>Il y a 
+            <span class="fw-bold">@ViewBag.ListeVehicule.Count</span>
+            @(ViewBag.ListeVehicule.Count > 1 ? "véhicules" : "véhicule") dans la caserne "
+            <span class="fw-bold">@ViewBag.NomCaserne</span>"
+        </p>
+    </div>
+    <hr />
+    @*Liste des véhicule qui appartiennent a la caserne*@
+    <form asp-controller="" asp-action="" method="post">
+        <div class="row">
+            @foreach (VehiculeDTO vehicule in ViewBag.ListeVehicule)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">@vehicule.VinVehicule</h5>
+                            <br />
+                            <p class="card-text">Code; @vehicule.Code</p>
+                            <p class="card-text">Type : @vehicule.Type</p>
+                            <p class="card-text">Marque : @vehicule.Marque</p>
+                            <p class="card-text">Modele : @vehicule.Modele</p>
+                            <p class="card-text">Annee : @vehicule.Annee</p>
+                            <p class="card-text">Capacité : @vehicule.NombrePersonne
+                                @(vehicule.NombrePersonne > 1 ? "personnes" : "personne")
+                            </p>
+                            <hr />
+                            <div class="text-center">
+                                <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le véhicule : @vehicule.VinVehicule @vehicule.Type ?')) {document.getElementById('vinVehicule').value ='@vehicule.VinVehicule'; this.form.action='/Vehicule/SupprimerVehicule'; this.form.method='post'; submit();}" type="button" />
+                                <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick=" document.getElementById('vinVehicule').value ='@vehicule.VinVehicule'; this.form.action='/Vehicule/FormulaireModifierVehicule'; this.form.method='post'; submit();" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <input id="vinVehicule" name="vinVehicule" type="hidden" />
+        <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
+        <div class="text-center">
+            <input class="btn btn-danger rounded" value="Vider la liste des véhicules" onclick=" if (confirm('Voulez-vous vraiment vider la liste de véhicule?')) {this.form.action='/Vehicule/ViderListeVehicule'; this.form.method='post'; submit();}" type="button" />
+        </div>
+    </form>
+}
+else
+{
+    <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50">
+        <p><span class="fw-bold">Aucun</span> véhicule pour la caserne "<span class="fw-bold">@ViewBag.NomCaserne</span>"</p>
+    </div>
+    <hr />
+}
+
+<hr />
+<form asp-controller="Vehicule" asp-action="AjouterVehicule" method="post" class="need-validation">
+    <div class="container">
+        <div class="text-center">
+            <h1>Ajouter un véhicule</h1>
+        </div>
+        <div class="form-group">
+            <label asp-for="VinVehicule" class="control-label"></label>
+            <input asp-for="VinVehicule" class="form-control" placeholder="1AB234CD5EF6G78H9" maxlength="17" required />
+        </div>
+
+        <script>
+            function updateHiddenInput() {
+                var select = document.getElementById("Code");
+                var typeInput = document.getElementById("Type");
+                var nombreInput = document.getElementById("NombrePersonne");
+
+                var selectedOption = select.options[select.selectedIndex];
+
+                typeInput.value = selectedOption.getAttribute("type");
+                nombreInput.value = selectedOption.getAttribute("nombrePersonne");
+            }
+        </script>
+        <div class="form-group">
+            <select id="Code" name="Code" class="form-control" required onchange="updateHiddenInput()">
+                <option value="" disabled selected>Choisir un type de véhicule</option>
+                @foreach (TypeVehiculeDTO type in ViewBag.ListeTypeVehicule)
+                {
+                    <option type="@type.Type" nombrePersonne="@type.NombrePersonne">@type.Code @type.Type @type.NombrePersonne @(type.NombrePersonne > 1 ? "personnes" : "personne")</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Type" class="control-label"></label>
+            <input id="Type" asp-for="Type" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NombrePersonne" class="control-label"></label>
+            <input id="NombrePersonne" asp-for="NombrePersonne" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Marque" class="control-label"></label>
+            <input asp-for="Marque" class="form-control" placeholder="Marque" required />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Modele" class="control-label"></label>
+            <input asp-for="Modele" class="form-control" placeholder="Modele" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Annee" class="control-label"></label>
+            @*Annee liste deroulant de int entre 1960 et notre annee*@
+            @{
+                int anneeActuelle = DateTime.Now.Year;
+            }
+
+            <select id="Annee" name="Annee" class="form-control" required>
+                <option value="" disabled selected>Choisir une année</option>
+                @for (int annee = anneeActuelle; annee >= 1960; annee--)
+                {
+                    <option value="@annee">@annee</option>
+                }
+            </select>
+        </div>
+        <br />
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Ajouter</button>
+        </div>
+        <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
+    </div>
+</form>
