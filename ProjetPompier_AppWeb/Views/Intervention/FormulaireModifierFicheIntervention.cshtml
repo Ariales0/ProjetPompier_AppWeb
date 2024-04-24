@@ -1,5 +1,63 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using ProjetPompier_AppWeb.Logics.Models
+@model FicheInterventionDTO;
+@* Si une erreur est detecté,  on l'affiche... *@
+@if (ViewBag.MessageErreur != null)
+{
+    <br />
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Erreur!</strong> @ViewBag.MessageErreur .
+    </div>
+}
+else
+{
+    <br />
+    <h3>Modifier la fiche fiche d'intervention : </h3>
+    <hr />
+    @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierFicheIntervention du controleur InterventionController *@
+    <form asp-controller="Intervention" asp-action="ModifierFicheIntervention" method="post">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+
+                    @*Affichage du type d'intervention, NON-MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="TypeIntervention">Type d'intervention : </label>
+                        <input asp-for="TypeIntervention" class="form-control" readonly>
+                    </div>
+
+                    @*Affichage de la date d'ouverture de la fiche, NON-MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="DateDebut" class="control-label">Date d'ouverture de la fiche :</label>
+                        <input asp-for="DateDebut" class="form-control" readonly />
+                    </div>
+
+                    @*Affichage et modification de l'adresse de l'intervention, MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Adresse" class="control-label">Adresse : </label>
+                        <input asp-for="Adresse" class="form-control" required>
+                    </div>
+
+                    @*Affichage et modification du résumé de l'intervention, MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Resume" class="control-label">Résumé :</label>
+                        <input asp-for="Resume" class="form-control" required>
+                    </div>
+                    <input type="hidden" asp-for="DateFin">
+                    <input type="hidden" asp-for="MatriculeCapitaine">
+                    <input type="hidden" value="@ViewBag.NomCaserne" id="matriculeCapitaine" name="nomCaserne">
+                    <input type="hidden" value="@ViewBag.MatriculeCapitaine" id="matriculeCapitaine" name="matriculeCapitaine">
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    @*Bouton pour la validation des modification*@
+                    <input type="submit" class="btn btn-primary" value="Modifier" />
+                    @*Bouton pour un retour en arriere*@
+                    <input type="button" class="btn btn-danger" value="Annuler" onclick="history.back();" />
+                </div>
+            </div>
+        </div>
+    </form>
 }

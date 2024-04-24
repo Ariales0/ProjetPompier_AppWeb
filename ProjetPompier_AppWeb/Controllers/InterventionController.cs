@@ -19,10 +19,30 @@ namespace ProjetPompier_AppWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine)
         {
-            ViewBag.NomCaserne = nomCaserne;
-            JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirCaserne?nomCaserne=" + nomCaserne);
-            CaserneDTO caserneDTO = JsonConvert.DeserializeObject<CaserneDTO>(jsonResponse.ToString());
-            
+            JsonValue jsonResponseListeCaserneDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
+            List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponseListeCaserneDTO.ToString());
+
+            try
+            {
+                if (nomCaserne == null || matriculeCapitaine == 0)
+                {
+                    nomCaserne = listeCaserneDTO[0].Nom;
+                    JsonValue jsonResponseListePompierDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
+                    List<PompierDTO> listePompierDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListePompierDTO.ToString());
+
+                    if (listePompierDTO.Count == 0)
+                    {
+                        ViewBag.MessageErreurCritique = "Aucun capitaine dans cette caserne";
+                        return View();
+                    }
+                    matriculeCapitaine = listePompierDTO[0].Matricule;
+                }
+                ViewBag.NomCaserne = nomCaserne;
+                ViewBag.MatriculePompier = matriculeCapitaine;
+
+            }
+
+
             jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + caserneDTO.Nom + "&seulementCapitaine=" + true) ;
             List<PompierDTO> listePompier = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponse.ToString());
             ViewBag.listePompier = listePompier;
