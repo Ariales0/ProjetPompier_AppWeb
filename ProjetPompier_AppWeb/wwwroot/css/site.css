@@ -35,9 +35,9 @@ body {
     font-size: 22px;
     line-height: 20px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
     .closebtn:hover {
         color: black;
+        transition: 0.5s;
     }

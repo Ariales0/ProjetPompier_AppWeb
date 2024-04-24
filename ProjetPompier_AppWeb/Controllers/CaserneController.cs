@@ -26,6 +26,7 @@ namespace ProjetPompier_AppWeb.Controllers
             ViewBag.NbCaserne = listeCaserneDTO.Count;
             //ViewBag.Liste prend la valeur de la liste des casernes
             ViewBag.ListeCaserne = listeCaserneDTO;
+            ViewBag.MessageErreur = "Ceci est un test";
             return View();
         }
 

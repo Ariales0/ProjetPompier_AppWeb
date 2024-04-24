@@ -1,13 +1,12 @@
 ﻿@using ProjetPompier_AppWeb.Logics.Models;
 @model GradeDTO;
-@* Si erreur du côté serveur... affichage du message d'erreur... *@
+@* Si une erreur est detecté,  on l'affiche... *@
 @if (ViewBag.MessageErreur != null)
 {
-    <div class="container">
-        <br />
-        <div class="alert alert-danger" role="alert">
-            @ViewBag.MessageErreur
-        </div>
+    <br />
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Erreur!</strong> @ViewBag.MessageErreur .
     </div>
 }
 else
