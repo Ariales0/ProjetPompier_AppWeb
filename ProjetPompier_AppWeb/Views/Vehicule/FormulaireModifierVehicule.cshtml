@@ -1,5 +1,84 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using ProjetPompier_AppWeb.Logics.Models
+@model VehiculeDTO;
+@* Si une erreur est detecté,  on l'affiche... *@
+@if (ViewBag.MessageErreur != null)
+{
+    <br />
+    <div class="alert alert-danger">@ViewBag.MessageErreur</div>
+}
+else
+{
+    <br />
+    <h3>Modifier le véhicule : @Model.VinVehicule</h3>
+    <hr />
+    @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierVehicule du controleur VehiculeController *@
+    <form asp-controller="TypeVehicule" asp-action="ModifierTypeVehicule" method="post">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    @*Affichage du vin du vehicule, NON-MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="VinVehicule" class="control-label"></label>
+                        <input asp-for="VinVehicule" class="form-control" readonly />
+                    </div>
+
+                    @*Affichage du code du vehicule, NON-MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Code" class="control-label"></label>
+                        <input asp-for="Code" class="form-control" readonly />
+                    </div>
+
+                    @*Affichage du type du vehicule, NON-MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Type" class="control-label"></label>
+                        <input asp-for="Type" class="form-control" readonly />
+                    </div>
+
+                    @*Affichage du nombre de personne pouvant rentrer dans le vehicule, NON-MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="NombrePersonne" class="control-label"></label>
+                        <input asp-for="NombrePersonne" class="form-control" readonly />
+                    </div>
+
+                    @*Affichage et modification du la marque du vehicule, MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Marque" class="control-label"></label>
+                        <input asp-for="Marque" class="form-control" placeholder="Marque" required />
+                    </div>
+
+                    @*Affichage et modification du modele du vehicule, MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Modele" class="control-label"></label>
+                        <input asp-for="Modele" class="form-control" placeholder="Modele" required />
+                    </div>
+
+                    @*Affichage et modification de l'annee' du vehicule, MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Annee" class="control-label"></label>
+                        @*Recuperation de l'annee du systeme*@
+                        @{
+                            int anneeActuelle = DateTime.Now.Year;
+                        }
+                        @*Annee liste deroulante de int entre 1960 et notre annee, avec notre annee selectionné*@
+                        <select id="Annee" name="Annee" class="form-control" required>
+                            @for (int annee = anneeActuelle; annee >= 1960; annee--)
+                            {
+                                <option value="@annee" selected="@annee.Equals(Model.Annee)">@annee</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-6">
+                    @*Bouton pour envoyer les modifiaction au controleur*@
+                    <input type="submit" class="btn btn-primary" value="Modifier" />
+                    @*Bouton pour revenir en arriere*@
+                    <input type="button" class="btn btn-danger" value="Annuler" onclick="history.back();" />
+                </div>
+            </div>
+        </div>
+    </form>
 }
