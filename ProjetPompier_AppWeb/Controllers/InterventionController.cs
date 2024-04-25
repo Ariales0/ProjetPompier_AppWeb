@@ -173,13 +173,13 @@ namespace ProjetPompier_AppWeb.Controllers
 		/// <param name="matriculeCapitaine">Matricule du pompier capitaine en charge de l'intervention.</param>
 		/// <param name="dateDebut">Date du debut de l'intervention.</param>
 		/// <returns>async Task<IActionResult></returns>
-		[Route("/EnseignantController/FormulaireModifierEnseignant")]
+		[Route("/Intervention/FormulaireModifierFicheIntervention")]
         [HttpGet]
-        public async Task<IActionResult> FormulaireModifierEnseignant([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine, [FromQuery] string dateDebut)
+        public async Task<IActionResult> FormulaireModifierFicheIntervention([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine, [FromQuery] string dateDebut)
         {
             try
             {
-                JsonValue reponseObtenirFicheIntervention = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateIntervention=" + dateDebut);
+                JsonValue reponseObtenirFicheIntervention = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateIntervention=" + dateDebut);
                 FicheInterventionDTO ficheInterventionDTO = JsonConvert.DeserializeObject<FicheInterventionDTO>(reponseObtenirFicheIntervention.ToString());
 
                 ViewBag.NomCaserne = nomCaserne;

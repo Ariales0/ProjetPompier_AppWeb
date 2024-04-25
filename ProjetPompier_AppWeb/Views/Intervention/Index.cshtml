@@ -7,10 +7,10 @@
 
     <br />
     <form asp-controller="Caserne" asp-action="Index" method="get">
-    <div class="alert">
+        <div class="alert">
             <span class="closebtn" onclick="this.parentElement.style.display='none'; this.parentElement.parentElement.submit();">&times;</span>
-        <strong>Erreur!</strong> @ViewBag.MessageErreurCritique .
-    </div>
+            <strong>Erreur!</strong> @ViewBag.MessageErreurCritique .
+        </div>
     </form>
 }
 else
@@ -34,17 +34,17 @@ else
                     <select id="nomCaserne" name="nomCaserne" class="form-control" onchange="this.form.submit()">
                         @foreach (CaserneDTO caserne in ViewBag.ListeCaserne)
                         {
-                            if (ViewBag.NomCaserne == caserne.Nom )
+                            if (ViewBag.NomCaserne == caserne.Nom)
                             {
                                 @* L'item sélectionné dans la liste est le nom de la caserne envoyée par la méthode Index du contrôleur *@
                                 <option value="@caserne.Nom" selected>@caserne.Nom</option>
                             }
                             else
                             {
-                                
+
                                 <option value="@caserne.Nom">@caserne.Nom</option>
                             }
-                            
+
                         }
                     </select>
                 </div>
@@ -102,7 +102,7 @@ else
                                         @*Bouton supprimer pour chaque véhicule*@
                                         <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le véhicule : @intervention.TypeIntervention @intervention.Resume ?')) {document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/SupprimerIntervention'; this.form.method='post'; submit();}" type="button" />
                                         @*Bouton modifier pour chaque véhicule*@
-                                        <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireModifierFicheIntervention'; this.form.method='post'; submit();" />
+                                        <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireModifierFicheIntervention'; this.form.method='get'; submit();" />
                                         @*Bouton fermer pour les interventions ouverte*@
                                         <input class="btn btn-info rounded ml-1" type="button" value="Fermer" onclick=" document.getElementById('dateDebut').value ='@intervention.DateDebut'; this.form.action='/Intervention/FormulaireFermerFicheIntervention'; this.form.method='post'; submit();" />
                                     </div>
@@ -114,7 +114,6 @@ else
             </div>
             @*Champs cachés pour l'envoie aux méthodes du controleur*@
             <input id="dateDebut" name="dateDebut" type="hidden" />
-            <input type="hidden" value="@DateTime.Now" id="dateDebut" name="dateDebut">
             <input id="MatriculeCapitaine" name="MatriculeCapitaine" value="@ViewBag.MatriculeCapitaine" type="hidden" />
             <input id="nomCaserne" name="nomCaserne" value="@ViewBag.NomCaserne" type="hidden">
             @*Vider la liste des interventions pour ce pompier*@
@@ -124,51 +123,47 @@ else
         </form>
     }
     <hr />
-    <div class="card border-2 rounded" style="width:20rem;">
-        <div class="card-body">
-            <h5 class="card-title text-center">Ouvrir une fiche d'intervention</h5>
             @*Formulaire d'ouverture d'un fiche d'intervention*@
-            <form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post">
+            <form asp-controller="Intervention" asp-action="OuvrirFicheIntervention" method="post" class="need-validation">
+                <div class="container">
+                    <div class="text-center">
+                        <h1>Ouvrir une fiche d'intervention</h1>
+                        @*Ajout du type d'intervention*@
+                        <div class="form-group">
+                            <label asp-for="TypeIntervention">Type d'intervention : </label>
+                            <input asp-for="TypeIntervention" class="form-control" maxlength="50" required>
+                        </div>
 
-                @*Ajout du type d'intervention*@
-                <div class="form-group">
-                    <label asp-for="TypeIntervention">Type d'intervention : </label>
-                    <input asp-for="TypeIntervention" class="form-control" required>
+                        @*Ajout de l'adresse de l'intervention*@
+                        <div class="form-group">
+                            <label asp-for="Adresse" class="control-label">Adresse : </label>
+                            <input asp-for="Adresse" class="form-control" maxlength="200" required>
+                        </div>
+
+                        @*Ajout du résumé de l'intervention*@
+                        <div class="form-group">
+                            <label asp-for="Resume" class="control-label">Résumé :</label>
+                            <textarea asp-for="Resume" rows="3" class="form-control" maxlength="500" required></textarea>
+                        </div>
+                        <br />
+                        @*Bouton de validation de l'ouverture de la fiche d'intervention*@
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success rounded">Ouvrir</button>
+                        </div>
+
+                        @*Champ caché de la caserne où le pompier se trouve*@
+                        <input type="hidden" value="@ViewBag.NomCaserne" id="matriculeCapitaine" name="nomCaserne">
+
+                        @*Champ caché du matricule du capitaine*@
+                        <input type="hidden" value="@ViewBag.MatriculeCapitaine" id="matriculeCapitaine" name="matriculeCapitaine">
+
+                        @*Champ caché de l'objet FicheInterventionDTO pour le matricule du pompier capitaine en charge de l'intervention*@
+                        <input type="hidden" value=@ViewBag.MatriculeCapitaine asp-for="MatriculeCapitaine">
+
+                        @*Champ caché de l'objet FicheInterventionDTO pour le date de début de l'intervention, celle du système*@
+                        <input type="hidden" value="@DateTime.Now" asp-for="DateDebut">
+                    </div>
                 </div>
-
-                @*Ajout de l'adresse de l'intervention*@
-                <div class="form-group">
-                    <label asp-for="Adresse" class="control-label">Adresse : </label>
-                    <input asp-for="Adresse" class="form-control" required>
-                </div>
-
-                @*Ajout du résumé de l'intervention*@
-                <div class="form-group">
-                    <label asp-for="Resume" class="control-label">Résumé :</label>
-                    <input asp-for="Resume" class="form-control" required>
-                </div>
-                <br />
-                @*Bouton de validation de l'ouverture de la fiche d'intervention*@
-                <div class="text-center">
-                    <button type="submit" class="btn btn-success rounded">Ouvrir</button>
-                </div>
-
-                @*Champ caché de la caserne où le pompier se trouve*@
-                <input type="hidden" value="@ViewBag.NomCaserne" id="matriculeCapitaine" name="nomCaserne">
-
-                @*Champ caché du matricule du capitaine*@
-                <input type="hidden" value="@ViewBag.MatriculeCapitaine" id="matriculeCapitaine" name="matriculeCapitaine">
-
-                @*Champ caché de l'objet FicheInterventionDTO pour le matricule du pompier capitaine en charge de l'intervention*@
-                <input type="hidden" value=@ViewBag.MatriculeCapitaine asp-for="MatriculeCapitaine">
-
-                @*Champ caché de l'objet FicheInterventionDTO pour le date de début de l'intervention, celle du système*@
-                <input type="hidden" value="@DateTime.Now" asp-for="DateDebut">
-
-                @*Champ caché de l'objet FicheInterventionDTO pour la date fin de l'intervention, pas definie *@
-                <input type="hidden" value="" asp-for="DateFin">
             </form>
-        </div>
-    </div>
 }
 

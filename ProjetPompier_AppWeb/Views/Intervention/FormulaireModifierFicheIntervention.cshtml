@@ -35,13 +35,13 @@ else
                     @*Affichage et modification de l'adresse de l'intervention, MODIFIABLE*@
                     <div class="form-group">
                         <label asp-for="Adresse" class="control-label">Adresse : </label>
-                        <input asp-for="Adresse" class="form-control" required>
+                        <input asp-for="Adresse" class="form-control" maxlength="200" required>
                     </div>
 
                     @*Affichage et modification du résumé de l'intervention, MODIFIABLE*@
                     <div class="form-group">
                         <label asp-for="Resume" class="control-label">Résumé :</label>
-                        <input asp-for="Resume" class="form-control" required>
+                        <textarea asp-for="Resume" rows="3" class="form-control" maxlength="500" required></textarea>
                     </div>
                     <input type="hidden" asp-for="DateFin">
                     <input type="hidden" asp-for="MatriculeCapitaine">
