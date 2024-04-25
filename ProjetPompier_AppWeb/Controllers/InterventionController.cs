@@ -19,34 +19,45 @@ namespace ProjetPompier_AppWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine)
         {
+            ViewData["Title"] = "Fiche(s) d'intervention(s)";
             try
             {
                 JsonValue jsonResponseListeCaserneDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
                 List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponseListeCaserneDTO.ToString());
-
+                List<PompierDTO> listeCapitaineDTO = new List<PompierDTO>();
                 if (nomCaserne == null || matriculeCapitaine == 0)
                 {
-                    nomCaserne = listeCaserneDTO.FirstOrDefault()?.Nom;
-                    if (string.IsNullOrEmpty(nomCaserne))
+                    nomCaserne = listeCaserneDTO[0].Nom;
+                    JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListeCapitaine?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
+                    listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
+                    if (listeCapitaineDTO.Count == 0)
                     {
-                        ViewBag.MessageErreurCritique = "Aucune caserne trouvée.";
+                        ViewBag.MessageErreurCritique = "Aucune caserne!";
                         return View();
                     }
 
-                    JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListeCapitaine?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
-                    List<PompierDTO> listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
                     if (listeCapitaineDTO.Count == 0)
                     {
                         ViewBag.MessageErreurCritique = "Aucun capitaine dans cette caserne";
                         return View();
                     }
-
                     matriculeCapitaine = listeCapitaineDTO[0].Matricule;
+                }
+                else
+                {
+                    JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
+                    listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
+                    if (listeCapitaineDTO.Count == 0)
+                    {
+                        ViewBag.MessageErreurCritique = "Aucun capitaine dans cette caserne";
+                        return View();
+                    }
                 }
 
                 ViewBag.NomCaserne = nomCaserne;
                 ViewBag.MatriculeCapitaine = matriculeCapitaine;
                 ViewBag.ListeCaserne = listeCaserneDTO;
+                ViewBag.ListeCapitaine = listeCapitaineDTO;
 
                 JsonValue jsonResponseListeFicheIntervetionDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine);
                 List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
@@ -56,13 +67,75 @@ namespace ProjetPompier_AppWeb.Controllers
                 {
                     ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
                 }
-
                 return View();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ViewBag.MessageErreurCritique = ex.Message;
+                JsonValue jsonResponseListeCaserneDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
+                List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponseListeCaserneDTO.ToString());
+
+                if (ViewBag.NomCaserne != null)
+                {
+                    try
+                    {
+                        JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
+                        List<PompierDTO> listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
+                        ViewBag.ListeCapitaine = listeCapitaineDTO;
+
+                        if (listeCapitaineDTO.Count != 0)
+                        {
+                            matriculeCapitaine = listeCapitaineDTO[0].Matricule;
+                            ViewBag.MatriculeCapitaine = matriculeCapitaine;
+                            JsonValue jsonResponseListeFicheIntervetionDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine);
+                            List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
+                            if (listeFicheInterventionDTO.Count == 0)
+                            {
+                                ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
+                            }
+                            ViewBag.ListeFicheIntervention = listeFicheInterventionDTO;
+                        }
+                        else
+                        {
+                            ViewBag.MessageErreurCritique = "Aucun capitaine dans cette caserne";
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ViewBag.MessageErreurCritique = e.Message;
+                    }
+                }
+                else
+                {
+                    JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
+                    List<PompierDTO> listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
+                    ViewBag.ListeCapitaine = listeCapitaineDTO;
+
+                    if (listeCapitaineDTO.Count == 0)
+                    {
+                        ViewBag.MessageErreurCritique = "Aucun capitaine dans cette caserne";
+                    }
+                    else
+                    {
+                        nomCaserne = listeCaserneDTO[0].Nom;
+                        matriculeCapitaine = listeCapitaineDTO[0].Matricule;
+
+                        ViewBag.NomCaserne = nomCaserne;
+                        ViewBag.MatriculeCapitaine = matriculeCapitaine;
+
+                        ViewBag.ListeCaserne = listeCaserneDTO;
+                        ViewBag.ListeCapitaine = listeCapitaineDTO;
+
+                        JsonValue jsonResponseListeFicheIntervetionDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine);
+                        List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
+                        ViewBag.ListeFicheIntervention = listeFicheInterventionDTO;
+
+                        if (listeFicheInterventionDTO.Count == 0)
+                        {
+                            ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
+                        }
+                    }
+                }
                 return View();
             }
         }
@@ -72,25 +145,24 @@ namespace ProjetPompier_AppWeb.Controllers
 		/// Rôles de l'action : 
 		///   -Ouvrir une fiche d'intervention.
 		/// </summary>
-		/// <param name="interventionDTO">Le DTO d'une intervention.</param>
+		/// <param name="nomCaserne">Nom de la caserne.</param>
+        /// /// <param name="ficheInterventionDTO">Le DTO d'une intervention.</param>
 		/// <returns>IActionResult</returns>
         [Route("/Intervention/OuvrirFicheIntervention")]
         [HttpPost]
-        public async Task<IActionResult> OuvrirFicheIntervention(string nomCaserne, FicheInterventionDTO fiche)
+        public async Task<IActionResult> OuvrirFicheIntervention(string nomCaserne, FicheInterventionDTO ficheInterventionDTO)
         {
             try
             {
-                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/OuvrirFicheIntervention?nomCaserne=" + nomCaserne, fiche);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/OuvrirFicheIntervention?nomCaserne=" + nomCaserne, ficheInterventionDTO);
             }
             catch (Exception e)
             {
-                ViewBag.MessageErreur = e.Message;
-                //Mettre cette ligne en commentaire avant de lancer les tests fonctionnels
-                TempData["MessageErreur"] = e.Message;
+                ViewBag.MessageErreurCritique = e.Message;
             }
 
             //Lancement de l'action Index...
-            return RedirectToAction("Index", "Intervention", new { nomCaserne = nomCaserne, matriculeCapitaine = fiche.MatriculeCapitaine });
+            return RedirectToAction("Index", "Intervention", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine });
         }
 
 

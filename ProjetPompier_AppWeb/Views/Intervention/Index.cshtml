@@ -4,11 +4,14 @@
 @* Si une erreur est detecté,  on l'affiche... *@
 @if (ViewBag.MessageErreurCritique != null)
 {
+
     <br />
+    <form asp-controller="Caserne" asp-action="Index" method="get">
     <div class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <span class="closebtn" onclick="this.parentElement.style.display='none'; this.parentElement.parentElement.submit();">&times;</span>
         <strong>Erreur!</strong> @ViewBag.MessageErreurCritique .
     </div>
+    </form>
 }
 else
 {
@@ -31,8 +34,17 @@ else
                     <select id="nomCaserne" name="nomCaserne" class="form-control" onchange="this.form.submit()">
                         @foreach (CaserneDTO caserne in ViewBag.ListeCaserne)
                         {
-                            @* L'item sélectionné dans la liste est le nom de la caserne envoyée par la méthode Index du contrôleur *@
-                            <option value="@caserne.Nom" selected="@caserne.Nom == ViewBag.NomCaserne">@caserne.Nom</option>
+                            if (ViewBag.NomCaserne == caserne.Nom )
+                            {
+                                @* L'item sélectionné dans la liste est le nom de la caserne envoyée par la méthode Index du contrôleur *@
+                                <option value="@caserne.Nom" selected>@caserne.Nom</option>
+                            }
+                            else
+                            {
+                                
+                                <option value="@caserne.Nom">@caserne.Nom</option>
+                            }
+                            
                         }
                     </select>
                 </div>
