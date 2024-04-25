@@ -150,7 +150,7 @@ namespace ProjetPompier_AppWeb.Controllers
 		/// <returns>IActionResult</returns>
         [Route("/Intervention/OuvrirFicheIntervention")]
         [HttpPost]
-        public async Task<IActionResult> OuvrirFicheIntervention(string nomCaserne, FicheInterventionDTO ficheInterventionDTO)
+        public async Task<IActionResult> OuvrirFicheIntervention([FromForm] string nomCaserne, [FromForm]FicheInterventionDTO ficheInterventionDTO)
         {
             try
             {
@@ -163,6 +163,36 @@ namespace ProjetPompier_AppWeb.Controllers
 
             //Lancement de l'action Index...
             return RedirectToAction("Index", "Intervention", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine });
+        }
+
+        /// <summary>
+		/// Action FormulaireModifierIntervention.
+		/// Permet d'afficher le formulaire pour la modification d'une fiche d'intervention.
+		/// </summary> 
+		/// <param name="nomCaserne">Nom de la caserne.</param>
+		/// <param name="matriculeCapitaine">Matricule du pompier capitaine en charge de l'intervention.</param>
+		/// <param name="dateDebut">Date du debut de l'intervention.</param>
+		/// <returns>async Task<IActionResult></returns>
+		[Route("/EnseignantController/FormulaireModifierEnseignant")]
+        [HttpGet]
+        public async Task<IActionResult> FormulaireModifierEnseignant([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine, [FromQuery] string dateDebut)
+        {
+            try
+            {
+                JsonValue reponseObtenirFicheIntervention = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateIntervention=" + dateDebut);
+                FicheInterventionDTO ficheInterventionDTO = JsonConvert.DeserializeObject<FicheInterventionDTO>(reponseObtenirFicheIntervention.ToString());
+
+                ViewBag.NomCaserne = nomCaserne;
+                ViewBag.MatriculeCapitaine = matriculeCapitaine;
+
+                return View(ficheInterventionDTO);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreurCritique = e.Message;
+                return RedirectToAction("Index");
+            }
+
         }
 
 
