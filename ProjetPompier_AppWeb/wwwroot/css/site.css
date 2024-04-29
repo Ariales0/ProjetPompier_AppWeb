@@ -33,6 +33,12 @@ body {
     color: white;
 }
 
+.information {
+    padding: 20px;
+    background-color: #66ccff;
+    color: white;
+}
+
 .closebtn {
     margin-left: 15px;
     color: white;

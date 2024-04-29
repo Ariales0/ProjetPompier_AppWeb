@@ -15,7 +15,7 @@ else
     <h3>Modifier la fiche fiche d'intervention : </h3>
     <hr />
     @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierFicheIntervention du controleur InterventionController *@
-    <form asp-controller="Intervention" asp-action="ModifierFicheIntervention" method="post">
+    <form asp-controller="Intervention" asp-action="ModifierFicheIntervention" method="post" class="need-validation">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -43,10 +43,8 @@ else
                         <label asp-for="Resume" class="control-label">Résumé :</label>
                         <textarea asp-for="Resume" rows="3" class="form-control" maxlength="500" required></textarea>
                     </div>
-                    <input type="hidden" asp-for="DateFin">
                     <input type="hidden" asp-for="MatriculeCapitaine">
-                    <input type="hidden" value="@ViewBag.NomCaserne" id="matriculeCapitaine" name="nomCaserne">
-                    <input type="hidden" value="@ViewBag.MatriculeCapitaine" id="matriculeCapitaine" name="matriculeCapitaine">
+                    <input type="hidden" value="@ViewBag.NomCaserne" id="nomCaserne" name="nomCaserne">
                 </div>
             </div>
             <br />

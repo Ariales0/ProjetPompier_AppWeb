@@ -25,16 +25,17 @@ namespace ProjetPompier_AppWeb.Controllers
                 JsonValue jsonResponseListeCaserneDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
                 List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponseListeCaserneDTO.ToString());
                 List<PompierDTO> listeCapitaineDTO = new List<PompierDTO>();
+                if (listeCaserneDTO.Count == 0)
+                {
+                    ViewBag.MessageErreurCritique = "Aucune caserne!";
+                    return View();
+                }
                 if (nomCaserne == null || matriculeCapitaine == 0)
                 {
                     nomCaserne = listeCaserneDTO[0].Nom;
                     JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListeCapitaine?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
                     listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
-                    if (listeCapitaineDTO.Count == 0)
-                    {
-                        ViewBag.MessageErreurCritique = "Aucune caserne!";
-                        return View();
-                    }
+
 
                     if (listeCapitaineDTO.Count == 0)
                     {
@@ -63,9 +64,29 @@ namespace ProjetPompier_AppWeb.Controllers
                 List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
                 ViewBag.ListeFicheIntervention = listeFicheInterventionDTO;
 
-                if (listeFicheInterventionDTO.Count == 0)
+                //Si il existe des fiches d'interventions pour ce capitaine
+                if (listeFicheInterventionDTO.Count > 0)
                 {
+                    //Si il y a déjà une fiche d'intervention ouverte pour ce capitaine, 
+                    //on empeche l'utilisateur d'ouvrir une nouvelle fiche d'intervention dans la vue
+                    foreach (FicheInterventionDTO ficheIntervention in listeFicheInterventionDTO)
+                    {
+                        //Si une fiche n'a pas de date de fin, c'est qu'elle st ouverte
+                        if (ficheIntervention.DateFin == null || ficheIntervention.DateFin == "")
+                        {
+                            ViewBag.FicheInterventionOuverte = true;
+                        }
+                        else
+                        {
+                            ViewBag.FicheInterventionOuverte = false;
+                        }
+                    }
+                }
+                else
+                {
+                    //On envoie un message dans la vue 
                     ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
+                    ViewBag.FicheInterventionOuverte = false;
                 }
                 return View();
 
@@ -89,9 +110,31 @@ namespace ProjetPompier_AppWeb.Controllers
                             ViewBag.MatriculeCapitaine = matriculeCapitaine;
                             JsonValue jsonResponseListeFicheIntervetionDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirListeFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine);
                             List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
-                            if (listeFicheInterventionDTO.Count == 0)
+
+
+                            //Si il existe des fiches d'interventions pour ce capitaine
+                            if (listeFicheInterventionDTO.Count > 0)
                             {
+                                //Si il y a déjà une fiche d'intervention ouverte pour ce capitaine, 
+                                //on empeche l'utilisateur d'ouvrir une nouvelle fiche d'intervention dans la vue
+                                foreach (FicheInterventionDTO ficheIntervention in listeFicheInterventionDTO)
+                                {
+                                    //Si une fiche n'a pas de date de fin, c'est qu'elle st ouverte
+                                    if (ficheIntervention.DateFin == null || ficheIntervention.DateFin == "")
+                                    {
+                                        ViewBag.FicheInterventionOuverte = true;
+                                    }
+                                    else
+                                    {
+                                        ViewBag.FicheInterventionOuverte = false;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //On envoie un message dans la vue 
                                 ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
+                                ViewBag.FicheInterventionOuverte = false;
                             }
                             ViewBag.ListeFicheIntervention = listeFicheInterventionDTO;
                         }
@@ -130,9 +173,29 @@ namespace ProjetPompier_AppWeb.Controllers
                         List<FicheInterventionDTO> listeFicheInterventionDTO = JsonConvert.DeserializeObject<List<FicheInterventionDTO>>(jsonResponseListeFicheIntervetionDTO.ToString());
                         ViewBag.ListeFicheIntervention = listeFicheInterventionDTO;
 
-                        if (listeFicheInterventionDTO.Count == 0)
+                        //Si il existe des fiches d'interventions pour ce capitaine
+                        if (listeFicheInterventionDTO.Count > 0)
                         {
+                            //Si il y a déjà une fiche d'intervention ouverte pour ce capitaine, 
+                            //on empeche l'utilisateur d'ouvrir une nouvelle fiche d'intervention dans la vue
+                            foreach (FicheInterventionDTO ficheIntervention in listeFicheInterventionDTO)
+                            {
+                                //Si une fiche n'a pas de date de fin, c'est qu'elle st ouverte
+                                if (ficheIntervention.DateFin == null || ficheIntervention.DateFin == "")
+                                {
+                                    ViewBag.FicheInterventionOuverte = true;
+                                }
+                                else
+                                {
+                                    ViewBag.FicheInterventionOuverte = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //On envoie un message dans la vue 
                             ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
+                            ViewBag.FicheInterventionOuverte = false;
                         }
                     }
                 }
@@ -150,7 +213,7 @@ namespace ProjetPompier_AppWeb.Controllers
 		/// <returns>IActionResult</returns>
         [Route("/Intervention/OuvrirFicheIntervention")]
         [HttpPost]
-        public async Task<IActionResult> OuvrirFicheIntervention([FromForm] string nomCaserne, [FromForm]FicheInterventionDTO ficheInterventionDTO)
+        public async Task<IActionResult> OuvrirFicheIntervention([FromForm] string nomCaserne, [FromForm] FicheInterventionDTO ficheInterventionDTO)
         {
             try
             {
@@ -192,9 +255,56 @@ namespace ProjetPompier_AppWeb.Controllers
                 ViewBag.MessageErreurCritique = e.Message;
                 return RedirectToAction("Index");
             }
-
         }
 
+        /// <summary>
+		/// Action ModifierFicheIntervention.
+		/// Permet de modifier une fiche d'intervention.
+		/// </summary> 
+		/// <param name="nomCaserne">Nom de la caserne.</param>
+        /// <param name="ficheIntervention">Le DTO de la fiche de la caserne</param>
+		/// <returns>async Task<IActionResult></returns>
+		[Route("/Intervention/ModifierFicheIntervention")]
+        [HttpPost]
+        public async Task<IActionResult> ModifierFicheIntervention([FromForm] string nomCaserne, [FromForm] FicheInterventionDTO ficheIntervention)
+        {
+            try
+            {
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ModifierFicheIntervention?nomCaserne=" + nomCaserne, ficheIntervention);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreurCritique = e.Message;
+            }
+            return RedirectToAction("Index", "Intervention", new { nomCaserne, matriculeCapitaine = ficheIntervention.MatriculeCapitaine });
+        }
+        /// <summary>
+		/// Action FermerFicheIntervention.
+		/// Permet de fermer une fiche d'intervention.
+		/// </summary> 
+		/// <param name="nomCaserne">Nom de la caserne.</param>
+		/// <param name="matriculeCapitaine">Matricule du pompier capitaine en charge de l'intervention.</param>
+		/// <param name="dateDebut">Date du debut de l'intervention.</param>
+		/// <returns>async Task<IActionResult></returns>
+		[Route("/Intervention/FermerFicheIntervention")]
+        [HttpPost]
+        public async Task<IActionResult> FermerFicheIntervention([FromForm] string nomCaserne, [FromForm] int matriculeCapitaine, [FromForm] string dateDebut)
+        {
+            FicheInterventionDTO ficheInterventionDTO = new FicheInterventionDTO();
+            try
+            {
+                JsonValue reponseObtenirFicheIntervention = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateIntervention=" + dateDebut);
+                ficheInterventionDTO = JsonConvert.DeserializeObject<FicheInterventionDTO>(reponseObtenirFicheIntervention.ToString());
 
+                ficheInterventionDTO.DateFin = DateTime.Now.ToString();
+
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/FermerFicheIntervention?nomCaserne=" + nomCaserne, ficheInterventionDTO);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreurCritique = e.Message;
+            }
+            return RedirectToAction("Index", "Intervention", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine });
+        }
     }
 }
