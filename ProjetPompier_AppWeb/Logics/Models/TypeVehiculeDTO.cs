@@ -18,23 +18,34 @@ namespace ProjetPompier_AppWeb.Logics.Models
         /// <summary>
         /// Propriété représentant le code du véhicule.
         /// </summary>
-        public string Code { get; set; }
+        public int Code { get; set; }
         /// <summary>
         /// Propriété représentant le nombre de personne du véhicule.
         /// </summary>
-        public int NombrePersonne { get; set; }
+        public int Personnes { get; set; }
 
-       /// <summary>
-       /// Propriété représentant le nombre de personne du véhicule.
-       /// </summary>
-       /// <param name="type"></param>
-       /// <param name="code"></param>
-       /// <param name="nombrePersonne"></param>
-        public TypeVehiculeDTO( string type = "", string code="", int nombrePersonne=0)
+        #endregion Proprietes
+
+        #region Constructeurs
+
+        /// <summary>
+        /// Constructeur vide.
+        /// </summary>
+        public TypeVehiculeDTO()
+        {
+        }
+
+        /// <summary>
+        /// Constructeur avec paramètres.
+        /// </summary>
+        /// <param name="code">Le code</param>
+        /// <param name="type">Le type</param>
+        /// <param name="personnes">Le nombre de personnes</param>
+        public TypeVehiculeDTO(int code = 0000, string type = "", int personnes = 0)
         {
             Type = type;
             Code = code;
-            NombrePersonne = nombrePersonne;
+            Personnes = personnes;
         }
 
         #endregion Constructeurs

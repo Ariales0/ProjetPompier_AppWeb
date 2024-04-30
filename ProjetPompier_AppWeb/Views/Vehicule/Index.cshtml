@@ -34,7 +34,7 @@
         <p>
             Il y a
             <span class="fw-bold">@ViewBag.ListeVehicule.Count</span>
-            @(ViewBag.ListeVehicule.Count > 1 ? "véhicules" : "véhicule") dans la caserne "
+            @(ViewBag.ListeVehicule.Count > 1 ? "véhicules" : "véhicule") dans la caserne 
             <span class="fw-bold">@ViewBag.NomCaserne</span>"
         </p>
     </div>
@@ -127,7 +127,7 @@ else
                 @foreach (TypeVehiculeDTO type in ViewBag.ListeTypeVehicule)
                 {
                     @*Attributs type et nombrePersonne qui permet, grace a la methode rafraichirChamps, de remplir les champs qui correspond et donc l'objet VehiculeDTO*@
-                    <option type="@type.Type" nombrePersonne="@type.NombrePersonne">@type.Code @type.Type @type.NombrePersonne @(type.NombrePersonne > 1 ? "personnes" : "personne")</option>
+                    <option type="@type.Type" nombrePersonne="@type.Personnes">@type.Code @type.Type @type.Personnes @(type.Personnes > 1 ? "personnes" : "personne")</option>
                 }
             </select>
         </div>

@@ -2,7 +2,7 @@
 @model TypeVehiculeDTO;
 
 @* Si une erreur est detecté,  on l'affiche... *@
-@if (ViewBag.MessageErreur != null)
+@if (ViewBag.MessageErreurCritique != null)
 {
     <br />
     <div class="alert">
@@ -15,7 +15,7 @@
 {
     <div class="bg-light text-dark rounded border-1 m-2 p-2 w-50"
     @*Affichage du nombre de type de véhicule*@>
-        <p>Il y a <span class="fw-bold">@ViewBag.ListeTypeVehicule.Count</span> type(s)de véhicule(s) "<span class="fw-bold">@ViewBag.TypeVehicule</span>"</p>
+        <p>Il y a <span class="fw-bold">@ViewBag.ListeTypeVehicule.Count</span> type(s)de véhicule(s)</p>
     </div>
     <hr/>
     @*Formulaire de la liste des types de véhicules, pour modifier, supprimer ou vider la liste*@
@@ -29,13 +29,13 @@
                             <h5 class="card-title">@typeVehicule.Type </h5>
                             <br />
                             <p class="card-text">Code : @typeVehicule.Code</p>
-                            <p class="card-text">Nombre de place : @typeVehicule.NombrePersonne</p>
+                            <p class="card-text">Nombre de place : @typeVehicule.Personnes</p>
                             <hr/>
                             <div class="text-center">
                                 @*Bouton pour supprimer ce type de véhicule*@
-                                <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le type de véhicule : @typeVehicule.Type ?')) {document.getElementById('codeVehicule').value ='@typeVehicule.Code'; this.form.action='/TypeVehicule/SupprimerTypeVehicule'; this.form.method='post'; submit();}" type="button" />
+                                <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le type de véhicule : @typeVehicule.Type ?')) {document.getElementById('codeTypeVehicule').value ='@typeVehicule.Code'; this.form.action='/TypeVehicule/SupprimerTypeVehicule'; this.form.method='post'; submit();}" type="button" />
                                 @*Bouton pour modifier ce type de véhicule*@
-                                <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('codeVehicule').value ='@typeVehicule.Code'; this.form.action='/TypeVehicule/FormulaireModifierTypeVehicule'; this.form.method='get'; submit();" />
+                                <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('codeTypeVehicule').value ='@typeVehicule.Code'; this.form.action='/TypeVehicule/FormulaireModifierTypeVehicule'; this.form.method='get'; submit();" />
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
             }
         </div>
         @*Champ caché du code du véhicule pour l'envoie à la méthode du controleur*@
-        <input id="codeVehicule" name="codeVehicule" type="hidden" />
+        <input id="codeTypeVehicule" name="codeTypeVehicule" type="hidden" />
         <div class="text-center">
             @*Bouton pour la suppression de tous les types de véhicules, pour vider la liste*@
             <input class="btn btn-danger rounded" value="Vider la liste des type de véhicules" onclick=" if (confirm('Voulez-vous vraiment vider liste des type de véhicules?')) {this.form.action='/TypeVehicule/ViderListeTypeVehicule'; this.form.method='post'; submit();}" type="button" />
@@ -80,8 +80,8 @@ else
 
         @*Ajout la capacité du véhicule à transporter des personnes*@
         <div class="form-group">
-            <label asp-for="NombrePersonne" class="control-label">Nombre de place disponible dans le véhicule :</label>
-            <input asp-for="NombrePersonne" class="form-control" placeholder="3" required />
+            <label asp-for="Personnes" class="control-label">Nombre de place disponible dans le véhicule :</label>
+            <input asp-for="Personnes" class="form-control" placeholder="3" required />
         </div>
         <br />
         <div class="text-center">
