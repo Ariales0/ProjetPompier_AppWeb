@@ -12,35 +12,23 @@
 else
 {
     <br />
-    <h3>Modifier le véhicule : @Model.VinVehicule</h3>
+    <h3>Modifier le véhicule : @Model.Vin</h3>
     <hr />
     @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierVehicule du controleur VehiculeController *@
-    <form asp-controller="TypeVehicule" asp-action="ModifierTypeVehicule" method="post">
+    <form asp-controller="Vehicule" asp-action="ModifierVehicule" method="post">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
                     @*Affichage du vin du vehicule, NON-MODIFIABLE*@
                     <div class="form-group">
-                        <label asp-for="VinVehicule" class="control-label"></label>
-                        <input asp-for="VinVehicule" class="form-control" readonly />
+                        <label asp-for="Vin" class="control-label"></label>
+                        <input asp-for="Vin" class="form-control" readonly />
                     </div>
 
                     @*Affichage du code du vehicule, NON-MODIFIABLE*@
                     <div class="form-group">
                         <label asp-for="Code" class="control-label"></label>
                         <input asp-for="Code" class="form-control" readonly />
-                    </div>
-
-                    @*Affichage du type du vehicule, NON-MODIFIABLE*@
-                    <div class="form-group">
-                        <label asp-for="Type" class="control-label"></label>
-                        <input asp-for="Type" class="form-control" readonly />
-                    </div>
-
-                    @*Affichage du nombre de personne pouvant rentrer dans le vehicule, NON-MODIFIABLE*@
-                    <div class="form-group">
-                        <label asp-for="NombrePersonne" class="control-label"></label>
-                        <input asp-for="NombrePersonne" class="form-control" readonly />
                     </div>
 
                     @*Affichage et modification du la marque du vehicule, MODIFIABLE*@
