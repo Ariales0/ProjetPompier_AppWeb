@@ -1,14 +1,21 @@
-﻿/// <summary>
+﻿
+
+
+using ProjetPompier_API.Logics.Models;
+
+/// <summary>
 /// Namespace pour les classe de type DTOs.
 /// </summary>
-namespace ProjetPompier_AppWeb.Logics.Models
+namespace ProjetPompier_API.Logics.DTOs
 {
     /// <summary>
     /// Classe représentant le DTO d'une fiche d'intervention.
     /// </summary>
     public class FicheInterventionDTO
     {
+
         #region Proprietes
+
         /// <summary>
         /// Propriété représentant la date et l'heure du début l'intervention.
         /// </summary>
@@ -25,9 +32,9 @@ namespace ProjetPompier_AppWeb.Logics.Models
         public string Adresse { get; set; }
 
         /// <summary>
-        /// Propriété représentant le type d'intervention.
+        /// Propriété représentant le code du type d'intervention.
         /// </summary>
-        public string TypeIntervention { get; set; }
+        public int CodeTypeIntervention { get; set; }
 
         /// <summary>
         /// Propriété représentant le resumé de l'intervention.
@@ -39,14 +46,14 @@ namespace ProjetPompier_AppWeb.Logics.Models
         /// </summary>
         public int MatriculeCapitaine { get; set; }
 
-
-
         #endregion Proprietes
 
         #region Constructeurs
+
         /// <summary>
         /// Constructeur vide.
         /// </summary>
+
         public FicheInterventionDTO() { }
 
         /// <summary>
@@ -58,16 +65,37 @@ namespace ProjetPompier_AppWeb.Logics.Models
         /// <param name="typeIntervention">Type d'intervention</param>
         /// <param name="resume">Resumé de l'intervention</param>
         /// <param name="matriculeCapitaine">Matricule du pompier capitaine</param>
-        public FicheInterventionDTO(string dateDebut = "1999-01-01 00:00:00", string dateFin = "1999-01-01 00:00:00", string adresse = "", string typeIntervention = "", string resume = "", int matriculeCapitaine = 000000)
+        /// <param name="vinVehicule">Vin du véhicule solicité pour l'intervention</param>
+        public FicheInterventionDTO(string dateDebut = "1999-01-01 00:00:00", string dateFin = null, string adresse = "", int codeTypeIntervention = 000, string resume = "", int matriculeCapitaine = 000000, string vinVehicule="")
+
         {
             DateDebut = dateDebut;
             DateFin = dateFin;
             Adresse = adresse;
-            TypeIntervention = typeIntervention;
+            CodeTypeIntervention = codeTypeIntervention;
             Resume = resume;
             MatriculeCapitaine = matriculeCapitaine;
+            VinVehicule = vinVehicule;
+        }
+
+        /// <summary>
+        /// Constructeur avec le modèle FicheInterventionModel en paramètre.
+        /// </summary>
+        /// <param name="laFiche">Le model fiche</param>
+        public FicheInterventionDTO(FicheInterventionModel laFiche)
+
+        {
+            DateDebut = laFiche.DateDebut;
+            DateFin = laFiche.DateFin;
+            Adresse = laFiche.Adresse;
+            CodeTypeIntervention = laFiche.CodeTypeIntervention;
+            Resume = laFiche.Resume;
+            MatriculeCapitaine = laFiche.MatriculeCapitaine;
+            VinVehicule = laFiche.VinVehicule;
         }
 
         #endregion Constructeurs
+
     }
+
 }

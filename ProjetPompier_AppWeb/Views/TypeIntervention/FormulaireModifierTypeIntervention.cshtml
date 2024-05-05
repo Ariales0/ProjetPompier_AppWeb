@@ -1,0 +1,53 @@
+﻿@using ProjetPompier_AppWeb.Logics.Models
+@model TypeVehiculeDTO;
+@* Si une erreur est detecté,  on l'affiche... *@
+@if (ViewBag.MessageErreur != null)
+{
+    <br />
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Erreur!</strong> @ViewBag.MessageErreur .
+    </div>
+}
+else
+{
+    <br />
+    <h3>Modifier le type de véhicule : </h3>
+    <hr />
+    @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierTypeVehicule du controleur TypeVehiculeController *@
+    <form asp-controller="TypeVehicule" asp-action="ModifierTypeVehicule" method="post">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+
+                    @*Affichage du du véhicule, NON-MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Code" class="control-label">Code du véhicule :</label>
+                        <input asp-for="Code" class="form-control" readonly />
+                    </div>
+
+                    @*Affichage et modification du type de vehicule, MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Type" class="control-label">Type du véhicule :</label>
+                        <input asp-for="Type" class="form-control" required />
+                    </div>
+
+                    @*Affichage et modification du nombre du personne transportable par le véhicule, MODIFIABLE*@
+                    <div class="form-group">
+                        <label asp-for="Personnes" class="control-label">Nombre de place disponible dans le véhicule :</label>
+                        <input asp-for="Personnes" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    @*Bouton pour la validation des modification*@
+                    <input type="submit" class="btn btn-primary" value="Modifier" />
+                    @*Bouton pour un retour en arriere*@
+                    <input type="button" class="btn btn-danger" value="Annuler" onclick="history.back();" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
