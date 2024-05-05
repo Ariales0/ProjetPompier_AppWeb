@@ -38,7 +38,7 @@ namespace ProjetPompier_AppWeb.Controllers
         {
             try
             {
-                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/TypesIntervention/AjouterTypesIntervention", typeInterventionDTO);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/TypesIntervention/AjouterTypeIntervention", typeInterventionDTO);
             }
             catch (Exception e)
             {
