@@ -1,12 +1,13 @@
 ﻿
 
 
-using ProjetPompier_API.Logics.Models;
+using ProjetPompier_AppWeb.Logics.Models;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Namespace pour les classe de type DTOs.
 /// </summary>
-namespace ProjetPompier_API.Logics.DTOs
+namespace ProjetPompier_AppWeb.Logics.Models
 {
     /// <summary>
     /// Classe représentant le DTO d'une fiche d'intervention.
@@ -46,6 +47,9 @@ namespace ProjetPompier_API.Logics.DTOs
         /// </summary>
         public int MatriculeCapitaine { get; set; }
 
+
+        public string VinVehicule { get; set; }
+
         #endregion Proprietes
 
         #region Constructeurs
@@ -78,21 +82,7 @@ namespace ProjetPompier_API.Logics.DTOs
             VinVehicule = vinVehicule;
         }
 
-        /// <summary>
-        /// Constructeur avec le modèle FicheInterventionModel en paramètre.
-        /// </summary>
-        /// <param name="laFiche">Le model fiche</param>
-        public FicheInterventionDTO(FicheInterventionModel laFiche)
 
-        {
-            DateDebut = laFiche.DateDebut;
-            DateFin = laFiche.DateFin;
-            Adresse = laFiche.Adresse;
-            CodeTypeIntervention = laFiche.CodeTypeIntervention;
-            Resume = laFiche.Resume;
-            MatriculeCapitaine = laFiche.MatriculeCapitaine;
-            VinVehicule = laFiche.VinVehicule;
-        }
 
         #endregion Constructeurs
 

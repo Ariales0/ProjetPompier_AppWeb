@@ -1,9 +1,9 @@
-﻿using ProjetPompier_API.Logics.Models;
+﻿using ProjetPompier_AppWeb.Logics.Models;
 
 /// <summary>
 /// Namespace pour les classe de type DTOs.
 /// </summary>
-namespace ProjetPompier_API.Logics.DTOs
+namespace ProjetPompier_AppWeb.Logics.DTOs
 {
     /// <summary>
     /// Classe représentant le DTO d'une équipe.
@@ -48,15 +48,7 @@ namespace ProjetPompier_API.Logics.DTOs
         }
 
 
-        /// <summary>
-        /// Constructeur avec le modèle EquipeModel en paramètre.
-        /// </summary>
-        /// <param name="equipe">L'objet du modèle EquipeModel.</param>
-        public EquipeDTO(EquipeModel equipe)
-        {
-            Code = equipe.Code;
-            ListePompierEquipe = equipe.ListePompierEquipe;
-        }
+        
 
         #endregion Constructeurs
     }
