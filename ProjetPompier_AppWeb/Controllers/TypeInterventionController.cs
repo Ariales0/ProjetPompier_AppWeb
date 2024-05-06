@@ -107,7 +107,7 @@ namespace ProjetPompier_AppWeb.Controllers
         {
             try
             {
-                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/TypesIntervention/SupprimerTypesIntervention?code=" + codeTypeIntervention, null);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/TypesIntervention/SupprimerTypeIntervention?code=" + codeTypeIntervention, null);
             }
             catch (Exception e)
             {

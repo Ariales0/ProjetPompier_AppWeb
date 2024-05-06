@@ -1,5 +1,5 @@
 ﻿@using ProjetPompier_AppWeb.Logics.Models
-@model TypeVehiculeDTO;
+@model TypeInterventionDTO;
 @* Si une erreur est detecté,  on l'affiche... *@
 @if (ViewBag.MessageErreur != null)
 {
@@ -12,30 +12,24 @@
 else
 {
     <br />
-    <h3>Modifier le type de véhicule : </h3>
+    <h3>Modifier le type d'intervention : </h3>
     <hr />
-    @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierTypeVehicule du controleur TypeVehiculeController *@
-    <form asp-controller="TypeVehicule" asp-action="ModifierTypeVehicule" method="post">
+    @* Formulaire qui, lorsqu'il est exécuté, appelle la méthode ModifierTypeIntervention du controleur TypeInterventionController *@
+    <form asp-controller="TypeIntervention" asp-action="ModifierTypeIntervention" method="post">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
 
                     @*Affichage du du véhicule, NON-MODIFIABLE*@
                     <div class="form-group">
-                        <label asp-for="Code" class="control-label">Code du véhicule :</label>
+                        <label asp-for="Code" class="control-label">Code de l'intervention :</label>
                         <input asp-for="Code" class="form-control" readonly />
                     </div>
 
-                    @*Affichage et modification du type de vehicule, MODIFIABLE*@
+                    @*Affichage et modification de la description de l'intervention, MODIFIABLE*@
                     <div class="form-group">
-                        <label asp-for="Type" class="control-label">Type du véhicule :</label>
-                        <input asp-for="Type" class="form-control" required />
-                    </div>
-
-                    @*Affichage et modification du nombre du personne transportable par le véhicule, MODIFIABLE*@
-                    <div class="form-group">
-                        <label asp-for="Personnes" class="control-label">Nombre de place disponible dans le véhicule :</label>
-                        <input asp-for="Personnes" class="form-control" required />
+                        <label asp-for="Description" class="control-label">Description de l'intervention :</label>
+                        <input asp-for="Description" class="form-control" required />
                     </div>
                 </div>
             </div>

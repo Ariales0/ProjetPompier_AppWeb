@@ -32,9 +32,9 @@
                             <hr/>
                             <div class="text-center">
                                 @*Bouton pour supprimer ce type de véhicule*@
-                                <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le type de d'intervention : @typeIntervention.Description ?')) {document.getElementById('codeTypeIntervention').value ='@typeIntervention.Code'; this.form.action='/TypeIntervention/SupprimerTypeIntervention'; this.form.method='post'; submit();}" type="button" />
+                                <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le type de dintervention : @typeIntervention.Description ?')) {document.getElementById('codeTypeIntervention').value ='@typeIntervention.Code'; this.form.action='/TypeIntervention/SupprimerTypeIntervention'; this.form.method='post'; submit();}" type="button" />
                                 @*Bouton pour modifier ce type de véhicule*@
-                                <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('codeTypeIntervention').value ='@typeIntervention.Code'; this.form.action='/TypeIntervention/FormulaireModifierTypeVehicule'; this.form.method='get'; submit();" />
+                                <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('codeTypeIntervention').value ='@typeIntervention.Code'; this.form.action='/TypeIntervention/FormulaireModifierTypeIntervention'; this.form.method='get'; submit();" />
                             </div>
                         </div>
                     </div>
