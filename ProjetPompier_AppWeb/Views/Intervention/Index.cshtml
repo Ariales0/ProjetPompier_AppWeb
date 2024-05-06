@@ -85,9 +85,9 @@ else
                     <div class="col-md-4 mb-3">
                         <div class="card rounded">
                             <div class="card-body">
-                                <h5 class="card-title">@intervention.CodeTypeIntervention</h5>
+                                <h5 class="card-title">@intervention.DateDebut </h5>
                                 <br />
-                                <p class="card-text">Date d'ouverture : @intervention.DateDebut</p>
+                                <p class="card-text">Code du type : @intervention.CodeTypeIntervention</p>
                                 <p class="card-text">Adresse : @intervention.Adresse</p>
                                 <p class="card-text">Resumé : @intervention.Resume</p>
                                 <hr />
@@ -127,9 +127,19 @@ else
                 <div class="text-center">
                     <h1>Ouvrir une fiche d'intervention</h1>
                     @*Ajout du type d'intervention*@
-                    <div class="form-group">
+                    @* <div class="form-group">
                         <label asp-for="CodeTypeIntervention">Code du type d'intervention : </label>
                         <input asp-for="CodeTypeIntervention" class="form-control" maxlength="50" required>
+                    </div> *@
+
+                    <div class="form-group">
+                        <label asp-for="CodeTypeIntervention">Type d'intervention : </label>
+                        <select asp-for="CodeTypeIntervention">
+							@foreach (TypeInterventionDTO typeIntervention in ViewBag.ListeTypeIntervention)
+							{
+								<option value="@typeIntervention.Code">@typeIntervention.Code | @typeIntervention.Description</option>
+							}
+                        </select>
                     </div>
 
                     @*Ajout de l'adresse de l'intervention*@

@@ -33,7 +33,7 @@ namespace ProjetPompier_AppWeb.Controllers
                 if (nomCaserne == null || matriculeCapitaine == 0)
                 {
                     nomCaserne = listeCaserneDTO[0].Nom;
-                    JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListeCapitaine?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
+                    JsonValue jsonResponseListeCapitaineDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompier?nomCaserne=" + nomCaserne + "&seulementCapitaine=true");
                     listeCapitaineDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonResponseListeCapitaineDTO.ToString());
 
 
@@ -88,10 +88,17 @@ namespace ProjetPompier_AppWeb.Controllers
                     ViewBag.Message = "Aucune fiche d'intervention pour ce capitaine";
                     ViewBag.FicheInterventionOuverte = false;
                 }
+
+                JsonValue jsonResponseListeTypeInterventionDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/TypesIntervention/ObtenirListeTypesIntervention");
+                List<TypeInterventionDTO> listeTypeInterventionDTO = JsonConvert.DeserializeObject<List<TypeInterventionDTO>>(jsonResponseListeTypeInterventionDTO.ToString());
+                ViewBag.ListeTypeIntervention = listeTypeInterventionDTO;
+
+
+
                 return View();
 
             }
-            catch (Exception)
+            catch (Exception excep)
             {
                 JsonValue jsonResponseListeCaserneDTO = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Caserne/ObtenirListeCaserne");
                 List<CaserneDTO> listeCaserneDTO = JsonConvert.DeserializeObject<List<CaserneDTO>>(jsonResponseListeCaserneDTO.ToString());
