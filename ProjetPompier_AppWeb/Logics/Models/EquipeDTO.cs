@@ -3,7 +3,7 @@
 /// <summary>
 /// Namespace pour les classe de type DTOs.
 /// </summary>
-namespace ProjetPompier_AppWeb.Logics.DTOs
+namespace ProjetPompier_AppWeb.Logics.Models
 {
     /// <summary>
     /// Classe représentant le DTO d'une équipe.

@@ -1,0 +1,101 @@
+﻿@using ProjetPompier_AppWeb.Logics.Models;
+@model EquipeDTO;
+
+@* Si une erreur est detecté,  on l'affiche... *@
+@if (ViewBag.MessageErreurCritique != null)
+{
+
+    <br />
+    <form asp-controller="Caserne" asp-action="Index" method="get">
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none'; this.parentElement.parentElement.submit();">&times;</span>
+            <strong>Erreur!</strong> @ViewBag.MessageErreurCritique .
+        </div>
+    </form>
+}
+else
+{
+    @*Si message du controleur*@
+    @if (ViewBag.Message != null)
+    {
+        <br />
+        <div class="attention">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>Attention!</strong> @ViewBag.Message .
+        </div>
+    }
+
+    @* Liste de selection de la caserne à laquelle appartient les interventions *@
+    
+
+    <h1>Équipes</h1>
+    <form asp-controller="Equipe" asp-action="Index">
+        <div class="form-group">
+            <h2>Ajouter une Équipe</h2>
+            
+            <label asp-for="VinVehicule">Véhicule : </label>
+            <select asp-for="VinVehicule">
+                @foreach(VehiculeDTO vehicule in ViewBag.listeVehicule)
+                {
+                    <option value="@vehicule.Vin">@vehicule.Marque | @vehicule.Modele | @vehicule.Vin</option>
+                    ViewBag.vehiculeSelectionne = vehicule;
+                    foreach (TypeVehiculeDTO type in ViewBag.listeTypeVehicule)
+					{
+						if(type.Code == vehicule.Code)
+						{
+							ViewBag.typeVehiculeSelectionne = type;
+						}
+					}
+				}
+            </select>
+            <br />
+
+        </div>
+    </form>
+    <form asp-controller="Equipe" asp-action="AjouterPompierEquipe" method="get">
+        <div class="form-group">
+            <select class="matriculePompier" name="matriculePompierEquipe">
+                <option value="" hidden selected name="matriculePompierEquipe">---Sélectionnez un pompier---</option>
+				@foreach (PompierDTO pompier in ViewBag.listePompier)
+				{
+					<option id="matriculePompierEquipe" class="matriculePompierEquipe" value="@pompier.Matricule">@pompier.Nom | @pompier.Prenom | @pompier.Grade</option>
+				}
+            </select>
+            <input type="text" hidden value="@ViewBag.NomCaserne" name="nomCaserne"/>
+            <input type="text" hidden value="@ViewBag.DateIntervention" name="dateIntervention" />
+            <input type="text" hidden value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine"/>
+            <input type="submit" value="Ajouter le pompier à l'équipe"/>
+            
+        </div>
+    </form>
+    @if(ViewBag.listePompierEquipe != null)
+    {
+        <div class="row">
+            @foreach (PompierDTO pompierEquipe in ViewBag.listePompierEquipe)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card rounded">
+                        <div class="card-body">
+                            <h5 class="card-title">@pompierEquipe.Prenom @pompierEquipe.Nom</h5>
+                            <br />
+                            <p class="card-text">Grade : @pompierEquipe.Grade</p>
+                            <br />
+                            <p class="card-text">Matricule : @pompierEquipe.Matricule</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert-info">
+            <p>Aucun pompier dans l'équipe</p>
+        </div>
+    }
+
+
+
+
+}
+

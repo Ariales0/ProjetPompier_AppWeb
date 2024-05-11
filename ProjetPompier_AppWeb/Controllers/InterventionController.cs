@@ -232,7 +232,8 @@ namespace ProjetPompier_AppWeb.Controllers
             }
 
             //Lancement de l'action Index...
-            return RedirectToAction("Index", "Intervention", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine });
+            List<PompierDTO> listePompierEquipeVide = new List<PompierDTO>(); //On envoie une liste vide pour éviter une erreur
+             return RedirectToAction("Index", "Equipe", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine, dateIntervention= ficheInterventionDTO.DateDebut, listePompierEquipeVide});
         }
 
         /// <summary>
