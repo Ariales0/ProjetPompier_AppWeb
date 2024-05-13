@@ -29,58 +29,134 @@ else
     
 
     <h1>Équipes</h1>
-    <form asp-controller="Equipe" asp-action="Index">
-        <div class="form-group">
-            <h2>Ajouter une Équipe</h2>
-            
-            <label asp-for="VinVehicule">Véhicule : </label>
-            <select asp-for="VinVehicule">
-                @foreach(VehiculeDTO vehicule in ViewBag.listeVehicule)
-                {
-                    <option value="@vehicule.Vin">@vehicule.Marque | @vehicule.Modele | @vehicule.Vin</option>
-                    ViewBag.vehiculeSelectionne = vehicule;
-                    foreach (TypeVehiculeDTO type in ViewBag.listeTypeVehicule)
-					{
-						if(type.Code == vehicule.Code)
-						{
-							ViewBag.typeVehiculeSelectionne = type;
-						}
-					}
-				}
-            </select>
-            <br />
+    @if(ViewBag.listeVehicule.Count > 0)
+    {
+        <form asp-controller="Equipe" asp-action="Index">
+            <div class="form-group">
+                <h2>Ajouter une Équipe</h2>
 
-        </div>
-    </form>
-    <form asp-controller="Equipe" asp-action="AjouterPompierEquipe" method="get">
-        <div class="form-group">
-            <select class="matriculePompier" name="matriculePompierEquipe">
-                <option value="" hidden selected name="matriculePompierEquipe">---Sélectionnez un pompier---</option>
-				@foreach (PompierDTO pompier in ViewBag.listePompier)
-				{
-					<option id="matriculePompierEquipe" class="matriculePompierEquipe" value="@pompier.Matricule">@pompier.Nom | @pompier.Prenom | @pompier.Grade</option>
-				}
-            </select>
-            <input type="text" hidden value="@ViewBag.NomCaserne" name="nomCaserne"/>
-            <input type="text" hidden value="@ViewBag.DateIntervention" name="dateIntervention" />
-            <input type="text" hidden value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine"/>
-            <input type="submit" value="Ajouter le pompier à l'équipe"/>
-            
-        </div>
-    </form>
-    @if(ViewBag.listePompierEquipe != null)
+                <label asp-for="VinVehicule">Véhicule : </label>
+                <select asp-for="VinVehicule" required>
+                    @foreach (VehiculeDTO vehicule in ViewBag.listeVehicule)
+                    {
+                        <option value="@vehicule.Vin">@vehicule.Marque | @vehicule.Modele | @vehicule.Vin</option>
+                        ViewBag.vehiculeSelectionne = vehicule;
+                        foreach (TypeVehiculeDTO type in ViewBag.listeTypeVehicule)
+                        {
+                            if (type.Code == vehicule.Code)
+                            {
+                                ViewBag.typeVehiculeSelectionne = type;
+                            }
+                        }
+
+                    }
+                </select>
+                <br />
+
+            </div>
+
+
+        </form>
+        <form asp-controller="Equipe" asp-action="AjouterPompierEquipe" method="get">
+            <div class="form-group">
+                <select class="matriculePompier" name="matriculePompierEquipe">
+                    <option value="" hidden selected name="matriculePompierEquipe">---Sélectionnez un pompier---</option>
+                    @foreach (PompierDTO pompier in ViewBag.listePompier)
+                    {
+                        <option id="matriculePompierEquipe" class="matriculePompierEquipe" value="@pompier.Matricule">@pompier.Nom | @pompier.Prenom | @pompier.Grade</option>
+                    }
+                </select>
+                <input type="text" hidden value="@ViewBag.NomCaserne" name="nomCaserne" />
+                <input type="text" hidden value="@ViewBag.DateIntervention" name="dateIntervention" />
+                <input type="text" hidden value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine" />
+                @if (ViewBag.VehiculeSelectionne != null)
+                {
+                    <input type="text" hidden value="@ViewBag.VehiculeSelectionne.Vin" name="vinVehicule" />
+
+                    @if (ViewBag.listeEquipe != null)
+                    {
+                        @foreach (EquipeDTO uneEquipeDTO in ViewBag.listeEquipe)
+                        {
+                            if (uneEquipeDTO.VinVehicule == ViewBag.VehiculeSelectionne.Vin)
+                            {
+                                ViewBag.CountPompierEquipe = uneEquipeDTO.ListePompierEquipe.Count;
+                            }
+                        }
+                    }
+                }
+                @if (ViewBag.listeVehicule.Count == 0)
+                {
+                    <input type="submit" value="Ajouter le pompier à l'équipe" class="btn btn-success" disabled />
+                }
+                else
+                {
+                    <input type="submit" value="Ajouter le pompier à l'équipe" class="btn btn-success" />
+                }
+
+            </div>
+        </form>
+    }
+    @if(ViewBag.listeEquipe != null)
     {
         <div class="row">
-            @foreach (PompierDTO pompierEquipe in ViewBag.listePompierEquipe)
+            @foreach (EquipeDTO equipeDTO in ViewBag.listeEquipe)
             {
                 <div class="col-md-4 mb-3">
                     <div class="card rounded">
                         <div class="card-body">
-                            <h5 class="card-title">@pompierEquipe.Prenom @pompierEquipe.Nom</h5>
+                            <h5 class="card-title">@equipeDTO.Code</h5>
                             <br />
-                            <p class="card-text">Grade : @pompierEquipe.Grade</p>
+                            <p class="card-text">Liste des pompiers : <br />
+                                @foreach (PompierDTO pompierDTO in equipeDTO.ListePompierEquipe)
+                                {
+                                    <span>- @pompierDTO.Prenom @pompierDTO.Nom | @pompierDTO.Grade</span>
+                                    <br>
+                                }
+                            </p>
                             <br />
-                            <p class="card-text">Matricule : @pompierEquipe.Matricule</p>
+                            <p class="card-text">VIN du véhicule : @equipeDTO.VinVehicule</p>
+                            <br />
+
+                            <form asp-controller="Equipe" asp-action="AjouterPompierEquipe" method="get">
+                                <div class="form-group">
+                                    
+                                    <input type="text" hidden value="@ViewBag.NomCaserne" name="nomCaserne" />
+                                    <input type="text" hidden value="@ViewBag.DateIntervention" name="dateIntervention" />
+                                    <input type="text" hidden value="@ViewBag.MatriculeCapitaine" name="matriculeCapitaine" />
+                                    <input type="text" hidden value="@equipeDTO.VinVehicule" name="vinVehicule" />
+
+                                    @foreach (VehiculeDTO unVehiculeDTO in ViewBag.listeToutVehicule)
+                                    {
+                                        if(unVehiculeDTO.Vin == equipeDTO.VinVehicule)
+										{
+											foreach(TypeVehiculeDTO type in ViewBag.listeTypeVehicule)
+											{
+												if (type.Code == unVehiculeDTO.Code)
+												{
+													ViewBag.leTypeDuVehiculeDeLequipe = type;
+                                                    @if (equipeDTO.ListePompierEquipe.Count < ViewBag.leTypeDuVehiculeDeLequipe.Personnes)
+                                                    {
+                                                        <select class="matriculePompier" name="matriculePompierEquipe">
+                                                            <option value="" hidden selected name="matriculePompierEquipe">---Sélectionnez un pompier---</option>
+                                                            @foreach (PompierDTO pompier in ViewBag.listePompier)
+                                                            {
+                                                                <option id="matriculePompierEquipe" class="matriculePompierEquipe" value="@pompier.Matricule">@pompier.Nom | @pompier.Prenom | @pompier.Grade</option>
+                                                            }
+                                                        </select>
+                                                        <input type="submit" value="Ajouter le pompier à l'équipe"  class="btn btn-success" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>L'équipe est pleine !</span>
+                                                    }
+                                                }
+											}
+										}    
+                                    }
+
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -90,7 +166,7 @@ else
     else
     {
         <div class="alert-info">
-            <p>Aucun pompier dans l'équipe</p>
+            <p>Aucune équipe ajoutée !</p>
         </div>
     }
 

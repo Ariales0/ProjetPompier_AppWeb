@@ -232,8 +232,7 @@ namespace ProjetPompier_AppWeb.Controllers
             }
 
             //Lancement de l'action Index...
-            List<PompierDTO> listePompierEquipeVide = new List<PompierDTO>(); //On envoie une liste vide pour éviter une erreur
-             return RedirectToAction("Index", "Equipe", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine, dateIntervention= ficheInterventionDTO.DateDebut, listePompierEquipeVide});
+             return RedirectToAction("Index", "Equipe", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine, dateIntervention= ficheInterventionDTO.DateDebut});
         }
 
         /// <summary>
@@ -301,7 +300,7 @@ namespace ProjetPompier_AppWeb.Controllers
             FicheInterventionDTO ficheInterventionDTO = new FicheInterventionDTO();
             try
             {
-                JsonValue reponseObtenirFicheIntervention = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateIntervention=" + dateDebut);
+                JsonValue reponseObtenirFicheIntervention = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Intervention/ObtenirFicheIntervention?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateDebutIntervention=" + dateDebut);
                 ficheInterventionDTO = JsonConvert.DeserializeObject<FicheInterventionDTO>(reponseObtenirFicheIntervention.ToString());
 
                 ficheInterventionDTO.DateFin = DateTime.Now.ToString();
@@ -313,6 +312,13 @@ namespace ProjetPompier_AppWeb.Controllers
                 ViewBag.MessageErreurCritique = e.Message;
             }
             return RedirectToAction("Index", "Intervention", new { nomCaserne, matriculeCapitaine = ficheInterventionDTO.MatriculeCapitaine });
+        }
+
+        [Route("/Intervention/RedirectionEquipe")]
+        [HttpPost]
+        public async Task<IActionResult> RedirectionEquipe([FromForm] string nomCaserne, [FromForm] int matriculeCapitaine, [FromForm] string dateDebut)
+        {
+            return RedirectToAction("Index", "Equipe", new { nomCaserne, matriculeCapitaine, dateIntervention = dateDebut });
         }
     }
 }

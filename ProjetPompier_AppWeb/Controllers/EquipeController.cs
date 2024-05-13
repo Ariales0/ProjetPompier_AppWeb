@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ProjetPompier_AppWeb.Logics.Models;
 using System.Json;
 using ProjetPompier_AppWeb.Logics.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjetPompier_AppWeb.Controllers
 {
@@ -17,8 +18,8 @@ namespace ProjetPompier_AppWeb.Controllers
 		/// </summary>
 		/// <returns>IActionResult</returns>
         [Route("Equipe")]
-        [HttpPost]
-        public async Task<IActionResult> Index([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine, [FromQuery] string dateIntervention, [FromBody] List<PompierDTO> listePompierEquipe)
+        [HttpGet]
+        public async Task<IActionResult> Index([FromQuery] string nomCaserne, [FromQuery] int matriculeCapitaine, [FromQuery] string dateIntervention)
         {
             ViewData["Title"] = "Équipe(s)";
             try
@@ -26,9 +27,7 @@ namespace ProjetPompier_AppWeb.Controllers
                 ViewBag.NomCaserne = nomCaserne;
                 ViewBag.MatriculeCapitaine = matriculeCapitaine;
                 ViewBag.DateIntervention = dateIntervention;
-                ViewBag.ListePompierEquipe = listePompierEquipe;
 
-                ViewBag.CountPompier = 0;
                 
 
                 
@@ -40,6 +39,10 @@ namespace ProjetPompier_AppWeb.Controllers
                 List<VehiculeDTO> listeVehiculeDTO = JsonConvert.DeserializeObject<List<VehiculeDTO>>(jsonValue.ToString());
                 ViewBag.ListeVehicule = listeVehiculeDTO;
 
+                jsonValue = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Vehicule/ObtenirListeVehicule?nomCaserne=" + nomCaserne + "&disponibleSeulement=" + false);
+                List<VehiculeDTO> listeToutVehiculeDTO = JsonConvert.DeserializeObject<List<VehiculeDTO>>(jsonValue.ToString());
+                ViewBag.ListeToutVehicule = listeToutVehiculeDTO;
+
                 jsonValue = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirListePompierDisponible?nomCaserne=" + nomCaserne);
                 List<PompierDTO> listePompierDTO = JsonConvert.DeserializeObject<List<PompierDTO>>(jsonValue.ToString());
                 ViewBag.ListePompier = listePompierDTO;
@@ -47,8 +50,17 @@ namespace ProjetPompier_AppWeb.Controllers
                 jsonValue = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/TypesVehicule/ObtenirListeTypesVehicule");
                 List<TypeVehiculeDTO> listeTypeVehiculeDTO = JsonConvert.DeserializeObject<List<TypeVehiculeDTO>>(jsonValue.ToString());
                 ViewBag.listeTypeVehicule= listeTypeVehiculeDTO;
+                if(ViewBag.VehiculeSelectionne == null)
+                {
+                    ViewBag.VehiculeSelectionne = listeVehiculeDTO.FirstOrDefault();
+                }
+
+                jsonValue = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Equipe/ObtenirListeEquipe?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateDebutIntervention=" + dateIntervention);
+                List<EquipeDTO> listeEquipeDTO = JsonConvert.DeserializeObject<List<EquipeDTO>>(jsonValue.ToString());
+                ViewBag.ListeEquipe = listeEquipeDTO;
 
 
+                
 
                 return View();
             }
@@ -92,17 +104,28 @@ namespace ProjetPompier_AppWeb.Controllers
 
         [Route("/Equipe/AjouterPompierEquipe")]
         [HttpGet]
-        public async Task<IActionResult> AjouterPompierEquipe([FromQuery] string nomCaserne, [FromQuery] int matriculePompierEquipe, [FromQuery] int matriculeCapitaine, [FromQuery] string dateIntervention) 
+        public async Task<IActionResult> AjouterPompierEquipe([FromQuery] string nomCaserne, [FromQuery] int matriculePompierEquipe, [FromQuery] string vinVehicule, [FromQuery] int matriculeCapitaine, [FromQuery] string dateIntervention)
         {
-            JsonValue jsonValue = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Pompier/ObtenirPompier?nomCaserne=" + nomCaserne + "&matriculePompier=" + matriculePompierEquipe);
-            PompierDTO pompierDTO = JsonConvert.DeserializeObject<PompierDTO>(jsonValue.ToString());
 
-            List<PompierDTO> listePompierEquipe = new List<PompierDTO>();
-            listePompierEquipe.Add(pompierDTO);
+            
+            await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Equipe/AjouterPompierEquipe?nomCaserne=" + nomCaserne + "&matriculeCapitaine=" + matriculeCapitaine + "&dateDebutIntervention=" + dateIntervention + "&vinVehicule=" + vinVehicule + "&matriculePompier=" + matriculePompierEquipe, null );
+            return RedirectToAction("Index", "Equipe", new { nomCaserne, matriculeCapitaine, dateIntervention});
+        }
 
-            ViewBag.ListePompierEquipe = listePompierEquipe;
-            TempData["ListePompierEquipe"] = listePompierEquipe.ToString();
-            return RedirectToAction("Index", "Equipe", new { nomCaserne, matriculeCapitaine, dateIntervention, listePompierEquipe});
+        [Route("/Equipe/IsEquipePleine")]
+        [HttpPost]
+        public bool IsEquipePleine([FromForm]int nombreMax, [FromForm]List<PompierDTO> unListeDePompiers)
+        {
+            if(unListeDePompiers.Count >= nombreMax)
+            {
+                ViewBag.IsEquipePleine = true;
+                return true;
+            }
+            else
+            {
+                ViewBag.IsEquipePleine = false;
+                return false;
+            }
         }
     }
 }
