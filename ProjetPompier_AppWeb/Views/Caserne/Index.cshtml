@@ -29,7 +29,7 @@ else
                             <hr />
                             <div class="text-center">
                                 <input class="btn btn-warning rounded" value="Modifier" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/FormulaireModifierCaserne'; this.form.method='get'; submit();" type="button" />
-                                <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/SupprimerCaserne'; this.form.method='post'; submit();" type="button" />
+                                <input class="btn btn-danger rounded ml-1" value="Supprimer" type="button" onclick="if (confirm('Voulez-vous vraiment surrpimer la caserne @caserne.Nom ?')){document.getElementById('nomCaserne').value ='@caserne.Nom'; this.form.action='/Caserne/SupprimerCaserne'; this.form.method='post'; submit();}" />
                                 <input class="btn btn-primary rounded ml-1" type="button" value="Interventions" onclick="document.getElementById('nomCaserne').value  = '@caserne.Nom'; document.getElementById('matriculeCapitaine').value  = '0';  this.form.action='/Intervention?nomCaserne=@caserne.Nom'; this.form.method='get'; submit();" />
                             </div>
                         </div>
@@ -40,7 +40,7 @@ else
         <input id="matriculeCapitaine" name="matriculeCapitaine" type="hidden" />
         <input id="nomCaserne" name="nomCaserne" type="hidden" />
         <div class="text-center">
-            <input class="btn btn-danger rounded" value="Vider la liste des casernes" onclick="this.form.action='/Caserne/ViderListeCaserne'; this.form.method='post'; submit();" type="button" />
+            <input class="btn btn-danger rounded" value="Vider la liste des casernes" onclick="if (confirm('Voulez-vous vraiment vider les casernes ?')) {this.form.action='/Caserne/ViderListeCaserne'; this.form.method='post'; submit();"} type="button" />
         </div>
     </form>
     <hr />

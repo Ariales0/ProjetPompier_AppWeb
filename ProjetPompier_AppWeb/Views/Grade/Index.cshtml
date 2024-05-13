@@ -31,7 +31,6 @@ else
                             <tr>
                                 <td>@grade.Description</td>
                                 <td>
-                                    <input class="btn btn-warning rounded ml-1" type="button" value="Modifier" onclick="document.getElementById('description').value ='@grade.Description'; this.form.action='/Grade/FormulaireModifierGrade'; this.form.method='get'; submit();" />
                                     <input class="btn btn-danger rounded ml-1" value="Supprimer" onclick="if (confirm('Voulez-vous vraiment supprimer le grade : @grade.Description ?')) {document.getElementById('description').value ='@grade.Description'; this.form.action='/Grade/SupprimerGrade'; this.form.method='post'; submit();}" type="button" />
                                 </td>
                             </tr>
