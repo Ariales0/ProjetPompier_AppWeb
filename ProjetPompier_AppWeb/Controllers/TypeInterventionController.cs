@@ -23,6 +23,7 @@ namespace ProjetPompier_AppWeb.Controllers
             List<TypeInterventionDTO> listeTypeIntervention= JsonConvert.DeserializeObject<List<TypeInterventionDTO>>(jsonResponse.ToString());
             //ViewBag.Liste prend la valeur de la liste des casernes
             ViewBag.ListeTypeIntervention = listeTypeIntervention;
+
             return View();
         }
 
@@ -148,6 +149,9 @@ namespace ProjetPompier_AppWeb.Controllers
             List<TypeInterventionDTO> listeTypeIntervention = JsonConvert.DeserializeObject<List<TypeInterventionDTO>>(jsonResponse.ToString());
 
              ViewData["skibidiRizz"] = listeTypeIntervention;
+
+
+
         }
     }
 

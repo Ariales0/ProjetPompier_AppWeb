@@ -124,6 +124,8 @@ namespace TestUnitaireCaserneAppWeb
 
             ViewResult resultatTypeIntervention= (ViewResult)controleurTypeIntervention.Index().Result;
 
+            resultatTypeIntervention = (ViewResult)controleurTypeIntervention.Index().Result;
+
             List<TypeInterventionDTO> listeTypeInterventionDansBDD = new List<TypeInterventionDTO>((List<TypeInterventionDTO>)resultatTypeIntervention.ViewData["ListeTypeIntervention"]);
 
             Assert.Equal(listeTypeInterventionDansBDD[(listeTypeInterventionDansBDD.Count) - 1].Code, typeInterventionTest.Code);
