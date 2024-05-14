@@ -58,8 +58,15 @@ else
                         <select id="MatriculeCapitaine" name="MatriculeCapitaine" class="form-control" onchange="this.form.submit()">
                             @foreach (PompierDTO pompier in ViewBag.ListeCapitaine)
                             {
-                                @* L'item sélectionné dans la liste est le matricule envoyée par la méthode Index du contrôleur *@
-                                <option value="@pompier.Matricule" selected="@pompier.Matricule == ViewBag.MatriculeCapitaine">@pompier.Nom @pompier.Prenom</option>
+                                if(pompier.Matricule == ViewBag.MatriculeCapitaine)
+                                {
+                                    @* L'item sélectionné dans la liste est le matricule envoyée par la méthode Index du contrôleur *@
+                                    <option value="@pompier.Matricule" selected>@pompier.Nom @pompier.Prenom</option>
+                                }
+                                else
+								{
+									<option value="@pompier.Matricule">@pompier.Nom @pompier.Prenom</option>
+								}
                             }
                         </select>
                     </div>

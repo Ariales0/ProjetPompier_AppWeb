@@ -63,7 +63,14 @@ else
                     <option value="" hidden selected name="matriculePompierEquipe">---Sélectionnez un pompier---</option>
                     @foreach (PompierDTO pompier in ViewBag.listePompier)
                     {
-                        <option id="matriculePompierEquipe" class="matriculePompierEquipe" value="@pompier.Matricule">@pompier.Nom | @pompier.Prenom | @pompier.Grade</option>
+                        if(ViewBag.matriculeCapitaine == pompier.Matricule)
+						{
+							<option id="matriculePompierEquipe" class="matriculePompierEquipe" value="@pompier.Matricule" selected>@pompier.Nom | @pompier.Prenom | @pompier.Grade</option>
+						}
+						else
+						{
+							<option id="matriculePompierEquipe" class="matriculePompierEquipe" value="@pompier.Matricule">@pompier.Nom | @pompier.Prenom | @pompier.Grade</option>
+						}
                     }
                 </select>
                 <input type="text" hidden value="@ViewBag.NomCaserne" name="nomCaserne" />
