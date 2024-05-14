@@ -96,22 +96,39 @@ namespace TestUnitaireCaserneAppWeb
 
   //      }
 
+        //[Fact]
+        //public void TestFonctionnelTypeVehicule()
+        //{
+        //    TypeVehiculeDTO typeVehiculeTest = new TypeVehiculeDTO(420,"Type vehicule test",420);
+        //    TypeVehiculeController controleurTypeVehicule = new TypeVehiculeController();
+
+        //    controleurTypeVehicule.AjouterTypeVehicule(typeVehiculeTest);
+
+        //    ViewResult resultatTypeVehicule = (ViewResult)controleurTypeVehicule.Index().Result;
+
+        //    List<TypeVehiculeDTO> listeTypeVehiculeDansBDD = new List<TypeVehiculeDTO>((List<TypeVehiculeDTO>)resultatTypeVehicule.ViewData["ListeTypeVehicule"]);
+
+        //    Assert.Equal(listeTypeVehiculeDansBDD[(listeTypeVehiculeDansBDD.Count) - 1].Code, typeVehiculeTest.Code);
+
+        //    controleurTypeVehicule.SupprimerTypeVehicule(typeVehiculeTest.Code);
+
+        //}
+
         [Fact]
-        public void TestFonctionnelTypeVehicule()
+        public void TestFoncitonnelTypeIntervention()
         {
-            TypeVehiculeDTO typeVehiculeTest = new TypeVehiculeDTO(420,"Type vehicule test",420);
-            TypeVehiculeController controleurTypeVehicule = new TypeVehiculeController();
+            TypeInterventionDTO typeInterventionTest = new TypeInterventionDTO(99, "Type intervention test");
+            TypeInterventionController controleurTypeIntervention = new TypeInterventionController();
 
-            controleurTypeVehicule.AjouterTypeVehicule(typeVehiculeTest);
+            controleurTypeIntervention.AjouterTypeIntervention(typeInterventionTest);
 
-            ViewResult resultatTypeVehicule = (ViewResult)controleurTypeVehicule.Index().Result;
+            ViewResult resultatTypeIntervention= (ViewResult)controleurTypeIntervention.Index().Result;
 
-            List<TypeVehiculeDTO> listeTypeVehiculeDansBDD = new List<TypeVehiculeDTO>((List<TypeVehiculeDTO>)resultatTypeVehicule.ViewData["ListeTypeVehicule"]);
+            List<TypeInterventionDTO> listeTypeInterventionDansBDD = new List<TypeInterventionDTO>((List<TypeInterventionDTO>)resultatTypeIntervention.ViewData["ListeTypeIntervention"]);
 
-            Assert.Equal(listeTypeVehiculeDansBDD[(listeTypeVehiculeDansBDD.Count) - 1].Code, typeVehiculeTest.Code);
+            Assert.Equal(listeTypeInterventionDansBDD[(listeTypeInterventionDansBDD.Count) - 1].Code, typeInterventionTest.Code);
 
-            controleurTypeVehicule.SupprimerTypeVehicule(typeVehiculeTest.Code);
-
+            controleurTypeIntervention.SupprimerTypeIntervention(typeInterventionTest.Code);
         }
     }
 }

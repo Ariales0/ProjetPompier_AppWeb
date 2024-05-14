@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using ProjetPompier_AppWeb.Logics.Models;
 using ProjetPompier_AppWeb.Utils;
+using System.ComponentModel;
 using System.Json;
 
 namespace ProjetPompier_AppWeb.Controllers
@@ -136,6 +137,17 @@ namespace ProjetPompier_AppWeb.Controllers
             }
             //Lancement de l'action Index...
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public  async void ObtenirListeTypesIntervention()
+        {
+            List<TypeInterventionDTO> listeTypeInterventionDansBDD;
+
+            JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/TypesIntervention/ObtenirListeTypesIntervention");
+            List<TypeInterventionDTO> listeTypeIntervention = JsonConvert.DeserializeObject<List<TypeInterventionDTO>>(jsonResponse.ToString());
+
+             ViewData["skibidiRizz"] = listeTypeIntervention;
         }
     }
 
